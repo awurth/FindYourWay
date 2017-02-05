@@ -1,0 +1,6 @@
+.idea/
+node_modules/
+dist/
+bower_components/
+npm-debug.log
+assets/css/*.css.map
