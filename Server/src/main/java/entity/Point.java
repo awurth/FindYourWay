@@ -2,12 +2,10 @@ package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@XmlRootElement
 public class Point implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,6 +33,17 @@ public class Point implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.hint = hint;
+        this.name = name;
+    }
+
+    /**
+     * Constructor for a Point without hints
+     * @param longitude x
+     * @param latitude y
+     */
+    public Point(String name, double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.name = name;
     }
 
