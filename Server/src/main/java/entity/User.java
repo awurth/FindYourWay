@@ -15,9 +15,7 @@ import java.io.Serializable;
         @NamedQuery(name = "User.countAll", query = "SELECT COUNT(u) FROM User u")
 })
 public class User implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
 
     @Id
     private String email;
