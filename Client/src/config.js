@@ -1,7 +1,10 @@
 import route from './routes'
 
 export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, $qProvider) {
-  $locationProvider.html5Mode(true)
+  $locationProvider.html5Mode({
+    'enabled': true,
+    'requireBase': false
+  })
   $qProvider.errorOnUnhandledRejections(false)
 
   // Add Authorization header with JWT if user is authenticated
