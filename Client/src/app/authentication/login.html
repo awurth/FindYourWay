@@ -1,14 +1,14 @@
-<div class="ui container">
-  <h1 class="ui center aligned header">Sign in</h1>
-  <form class="ui form">
-    <div class="field">
+<div class="container">
+  <h1>Sign in</h1>
+  <form>
+    <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" id="username" ng-model="user.username">
+      <input type="text" id="username" class="form-control" ng-model="user.username">
     </div>
-    <div class="field">
+    <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" ng-model="user.password">
+      <input type="password" id="password" class="form-control" ng-model="user.password">
     </div>
-    <input type="submit" class="ui teal circular button" value="Login" ng-click="login()">
+    <input type="submit" class="btn btn-primary" value="Login" ng-click="login()">
   </form>
 </div>
