@@ -1,8 +1,8 @@
 *.iml
 *.xml
 !pom.xml
-!persitence.xml
-!/webapp/WEB_INF/beans.xml
+!/src/main/webapp/WEB-INF/beans.xml
+!/src/main/resources/META-INF/persistence.xml
 *.DEPLOYED
 .classpath
 .project
