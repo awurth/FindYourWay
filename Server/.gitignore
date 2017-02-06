@@ -1,10 +1,12 @@
 *.iml
 *.xml
 !pom.xml
+!persitence.xml
 !/webapp/WEB_INF/beans.xml
 *.DEPLOYED
 .classpath
 .project
 .settings/*
 .idea/*
+/target/*
 
