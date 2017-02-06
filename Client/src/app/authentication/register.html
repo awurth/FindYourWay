@@ -1,22 +1,22 @@
-<div class="ui container">
-  <h1 class="ui center aligned header">Sign up</h1>
-  <form class="ui form">
-    <div class="field">
+<div class="container">
+  <h1>Sign up</h1>
+  <form>
+    <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" id="username" ng-model="user.username">
+      <input type="text" id="username" class="form-control" ng-model="user.username">
     </div>
-    <div class="field">
+    <div class="form-group">
       <label for="email">Email</label>
-      <input type="text" id="email" ng-model="user.email">
+      <input type="text" id="email" class="form-control" ng-model="user.email">
     </div>
-    <div class="field">
+    <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" ng-model="user.password">
+      <input type="password" id="password" class="form-control" ng-model="user.password">
     </div>
-    <div class="field">
+    <div class="form-group">
       <label for="password-confirm">Confirm password</label>
-      <input type="password" id="password-confirm" ng-model="user.passwordConfirmation">
+      <input type="password" id="password-confirm" class="form-control" ng-model="user.passwordConfirmation">
     </div>
-    <input type="submit" class="ui teal circular button" value="Register" ng-click="register()">
+    <input type="submit" class="btn btn-primary" value="Register" ng-click="register()">
   </form>
 </div>

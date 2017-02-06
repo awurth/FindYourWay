@@ -2,9 +2,9 @@
 *.xml
 !pom.xml
 !/webapp/WEB_INF/beans.xml
-target/*
 *.DEPLOYED
 .classpath
 .project
 .settings/*
 .idea/*
+

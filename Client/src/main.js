@@ -1,8 +1,9 @@
-import './assets/app.scss'
+import './assets/scss/app.scss'
 
 import angular from 'angular'
 import resource from 'angular-resource'
 import router from 'angular-ui-router'
+import ngMap from 'ngmap'
 
 import config from './config'
 import JWTService from './app/authentication/jwt.service'
@@ -12,10 +13,11 @@ import LoginController from './app/authentication/login.controller'
 import RegisterController from './app/authentication/register.controller'
 import TopbarDirective from './app/topbar/topbar.directive'
 import HomeController from './app/home/home.controller'
+import GameController from './app/game/game.controller'
 
-export default angular.module('app', [resource, router])
+export default angular.module('app', [resource, router, ngMap])
   .constant('API', {
-    url: 'http://localhost:8080'
+    url: 'http://localhost:8080/workshop-2/api/'
   })
   .factory('User', User)
   .service('JWTService', JWTService)
@@ -25,3 +27,4 @@ export default angular.module('app', [resource, router])
   .controller('RegisterCtrl', RegisterController)
   .directive('topbar', TopbarDirective)
   .controller('HomeCtrl', HomeController)
+  .controller('GameCtrl', GameController)

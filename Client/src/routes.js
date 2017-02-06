@@ -16,4 +16,9 @@ export default function route ($stateProvider) {
       template: require('./app/authentication/register.html'),
       controller: 'RegisterCtrl'
     })
+    .state('game', {
+      url: '/game',
+      template: require('./app/game/game.html'),
+      controller: 'GameCtrl'
+    })
 }
