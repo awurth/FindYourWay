@@ -15,7 +15,7 @@ import HomeController from './app/home/home.controller'
 
 export default angular.module('app', [resource, router])
   .constant('API', {
-    url: 'http://localhost:8080'
+    url: 'http://localhost:8080/workshop-2/api/'
   })
   .factory('User', User)
   .service('JWTService', JWTService)
