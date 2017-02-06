@@ -27,9 +27,9 @@ public class Path implements Serializable {
     Point goal;
 
 
-    HashMap<Point, String> points = new HashMap<>(5);
+    //HashMap<Point, String> points = new HashMap<>(5);
 
-    List<String> hints = new ArrayList<>(5);
+  //  List<String> hints = new ArrayList<>(5);
 
     /**
      * Empty Constructor
@@ -41,10 +41,10 @@ public class Path implements Serializable {
      * @param points the points associated to hints
      * @param goal final point
      */
-    public Path(HashMap<Point,String> points, Point goal) {
+  /**  public Path(HashMap<Point,String> points, Point goal) {
         this.points = points;
         this.goal = goal;
-    }
+    }*/
 
     /**
      * Constructor to create the path of a game
@@ -52,11 +52,11 @@ public class Path implements Serializable {
      * @param hints the hints for the final point
      * @param goal final point
      */
-    public Path(HashMap<Point,String> points, List<String> hints, Point goal) {
+   /** public Path(HashMap<Point,String> points, List<String> hints, Point goal) {
         this.points = points;
         this.hints = hints;
         this.goal = goal;
-    }
+    }*/
 
     /**
      * Helper method to generate an id and set it to this.id
@@ -82,7 +82,7 @@ public class Path implements Serializable {
         this.goal = goal;
     }
 
-    public HashMap<Point, String> getPoints() {
+   /** public HashMap<Point, String> getPoints() {
         return points;
     }
 
@@ -97,4 +97,5 @@ public class Path implements Serializable {
     public void setHints(List<String> hints) {
         this.hints = hints;
     }
+    */
 }
