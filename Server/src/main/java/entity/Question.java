@@ -11,11 +11,11 @@ import java.util.UUID;
 @Entity
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Path.findAll", query = "SELECT p FROM Path p"),
-        @NamedQuery(name = "Path.findById", query = "SELECT p FROM Path p WHERE p.id = :id"),
-        @NamedQuery(name = "Path.countAll", query = "SELECT COUNT(p) FROM Path p")
+        @NamedQuery(name = "Path.findAll", query = "SELECT p FROM Question p"),
+        @NamedQuery(name = "Path.findById", query = "SELECT p FROM Question p WHERE p.id = :id"),
+        @NamedQuery(name = "Path.countAll", query = "SELECT COUNT(p) FROM Question p")
 })
-public class Path implements Serializable {
+public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final int PATH_LENGTH = 5;
@@ -23,15 +23,15 @@ public class Path implements Serializable {
     @Id
     private String id;
 
-    @ManyToMany
+    @OneToMany
     private List<Point> points = new ArrayList<>(PATH_LENGTH);
 
     /**
      * Empty Constructor
      */
-    public Path() {}
+    public Question() {}
 
-    public Path(List<Point> points) {
+    public Question(List<Point> points) {
         this.points = points;
     }
 
