@@ -2,10 +2,12 @@ package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
+@XmlRootElement
 public class Point implements Serializable {
     private static final long serialVersionUID = 1L;
 

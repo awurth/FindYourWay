@@ -31,10 +31,6 @@ public class Path implements Serializable {
      */
     public Path() {}
 
-    /**
-     * Constructor to create the path of a game without hints for the final point
-     * @param points the points associated to hints
-     */
     public Path(List<Point> points) {
         this.points = points;
     }
@@ -75,4 +71,5 @@ public class Path implements Serializable {
     public void setPoints(List<Point> points) {
         this.points = points;
     }
+
 }

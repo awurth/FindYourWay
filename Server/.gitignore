@@ -1,10 +1,12 @@
 *.iml
 *.xml
 !pom.xml
-!/webapp/WEB_INF/beans.xml
+!/src/main/webapp/WEB-INF/beans.xml
+!/src/main/resources/META-INF/persistence.xml
 *.DEPLOYED
 .classpath
 .project
 .settings/*
 .idea/*
+/target/*
 
