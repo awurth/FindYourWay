@@ -46,7 +46,7 @@ public class QuestionRepresentation {
 
         for (Point point : question.getPoints()) {
             pointResource.insert(point);
-            // ToDo : Links to Point + Add Link List in Question
+            // ToDo : Point Links + Add Link List in Question
         }
 
 
