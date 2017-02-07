@@ -48,6 +48,7 @@ public class ScoreResource {
      * @return the score added
      */
     public Score insert(Score score) {
+        score.generateId();
         return entityManager.merge(score);
     }
     
