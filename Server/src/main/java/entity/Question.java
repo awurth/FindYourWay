@@ -11,9 +11,9 @@ import java.util.UUID;
 @Entity
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Path.findAll", query = "SELECT p FROM Question p"),
-        @NamedQuery(name = "Path.findById", query = "SELECT p FROM Question p WHERE p.id = :id"),
-        @NamedQuery(name = "Path.countAll", query = "SELECT COUNT(p) FROM Question p")
+        @NamedQuery(name = "Question.findAll", query = "SELECT q FROM Question q"),
+        @NamedQuery(name = "Question.findById", query = "SELECT q FROM Question q WHERE q.id = :id"),
+        @NamedQuery(name = "Question.countAll", query = "SELECT COUNT(q) FROM Question q")
 })
 public class Question implements Serializable {
 
@@ -67,7 +67,7 @@ public class Question implements Serializable {
                 counter++;
         }
 
-        return (counter == 0 || counter > 1);
+        return (counter == 1);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Question implements Serializable {
      * this method also removes hyphens
      */
     public void generateId() {
-        id = UUID.fromString(UUID.randomUUID().toString()).toString();
+        id = UUID.randomUUID().toString().replaceAll("-", "");;
     }
 
     /**
