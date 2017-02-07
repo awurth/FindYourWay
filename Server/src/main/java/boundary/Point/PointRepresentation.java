@@ -32,14 +32,15 @@ public class PointRepresentation {
     @Path("/{id}")
     public Response get(@PathParam("id") String id) {
         Point point = pointResource.findById(id);
+
         if (point == null)
             return Response.noContent().build();
+
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
     
     @POST
     public Response add(@Context UriInfo uriInfo, Point point) {
-        
          if (point == null)
             return Response.status(400)
                     .type(MediaType.TEXT_PLAIN_TYPE)
@@ -51,24 +52,25 @@ public class PointRepresentation {
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
     
-     @PUT
+    @PUT
     public Response update(Point point) {
-        
-        if(point == null)
+        if (point == null)
             return Response.status(400)
                     .type(MediaType.TEXT_PLAIN_TYPE)
                     .entity("You sent an empty object")
                     .build();
         
         point = pointResource.findById(point.getId());
-        if(point == null) 
+        if (point == null)
             return Response.noContent().build();
-        
-        Double lat = point.getLatitude();
-        Double lon = point.getLongitude();
-        if((point.getLinks() == null) || (lat == null) || (lon == null)) 
-            return Response.status(404).entity("Not Found").build();
-        
-        return Response.status(204).build();
+
+        if (point.isValid())
+            return Response.status(400)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity("Invalid object")
+                    .build();
+
+        pointResource.update(point);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
