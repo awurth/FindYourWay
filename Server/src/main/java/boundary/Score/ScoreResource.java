@@ -5,6 +5,7 @@
  */
 package boundary.Score;
 
+import entity.Question;
 import entity.Score;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -21,8 +22,7 @@ public class ScoreResource {
     
     @PersistenceContext
     EntityManager entityManager;
-    
-    
+
     /**
      * Method to find a Score by id
      * @param id
@@ -40,6 +40,17 @@ public class ScoreResource {
         return entityManager.createNamedQuery("Score.findAll", Score.class)
                 .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
                 .getResultList();
+    }
+
+    /**
+     * Method to get all the scores from a Question
+     * @param question
+     * @return List of Score
+     */
+    public List<Score> findByQuestion(Question question) {
+        return entityManager.createQuery("SELECT s FROM Score s WHERE s.question =: question")
+        .setParameter("question", question)
+        .getResultList();
     }
     
     /**
