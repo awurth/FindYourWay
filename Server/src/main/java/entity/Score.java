@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s ORDER BY s.value DESC")
+        @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s ORDER BY s.value DESC"),
 })
 public class Score implements Serializable {
     
@@ -22,6 +22,9 @@ public class Score implements Serializable {
     
     @ManyToOne
     private User user;
+
+    @ManyToOne
+    private Question question;
 
     private long value;
 
@@ -45,7 +48,7 @@ public class Score implements Serializable {
      * @return if the score is valid
      */
     public boolean isValid() {
-        return (user != null && (Long.toString(value) != null && value >= 0));
+        return (question != null && user != null && (Long.toString(value) != null && value >= 0));
     }
     
     /**
@@ -79,6 +82,13 @@ public class Score implements Serializable {
     public void setValue(long value) {
         this.value = value;
     }
-  
-    
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
 }
