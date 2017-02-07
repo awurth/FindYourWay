@@ -55,7 +55,7 @@ public class ScoreRepresentation {
         
         if(score == null)
             return Response.status(400)
-                    .type(MediaType.APPLICATION_JSON)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
                     .entity("You sent an empty object")
                     .build();
         
@@ -72,7 +72,7 @@ public class ScoreRepresentation {
         
         if(score == null)
             return Response.status(400)
-                    .type(MediaType.APPLICATION_JSON)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
                     .entity("You sent an empty object")
                     .build();
         

@@ -10,6 +10,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import javax.ws.rs.POST;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 @Path("/point")
 public class PointRepresentation {
@@ -29,6 +32,20 @@ public class PointRepresentation {
         Point point = pointResource.findById(id);
         if (point == null)
             return Response.noContent().build();
+        return Response.ok(point, MediaType.APPLICATION_JSON).build();
+    }
+    
+    @POST
+    public Response add(@Context UriInfo uriInfo, Point point) {
+        
+         if (point == null)
+            return Response.status(400)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity("Error : you sent an empty object")
+                    .build();
+         
+         point = pointResource.insert(point);
+       
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
 }
