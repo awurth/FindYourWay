@@ -7,38 +7,45 @@ package entity;
 
 import java.io.Serializable;
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Utilisateur
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Score.findAll", query = "SELECT u FROM Score u ORDER BY u.value DESC")
+        @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s ORDER BY s.value DESC")
 })
 public class Score implements Serializable {
     
     @Id
     private String id;
     
-    @OneToMany
+    @ManyToOne
     private User user;
-    
-    //the highest score ever for a specific user
+
     private long value;
-    
+
+    /**
+     * Empty constructor
+     */
     public Score() {}
-    
-    public Score(User joueur, long score) {
-        this.user = joueur;
-        this.value = score;
+
+    /**
+     * Score constructor
+     * @param user who made this score
+     * @param value : score points
+     */
+    public Score(User user, long value) {
+        this.user = user;
+        this.value = value;
+    }
+
+    /**
+     * Helper method to know if critical fields have been filled
+     * @return if the score is valid
+     */
+    public boolean isValid() {
+        return (user != null && (Long.toString(value) != null && value >= 0));
     }
     
     /**
