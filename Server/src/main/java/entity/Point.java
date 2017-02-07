@@ -2,7 +2,11 @@ package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,6 +21,10 @@ public class Point implements Serializable {
     private String name;
     private String hint;
     private boolean isFinal;
+
+    @Transient
+    @XmlElement(name="_links")
+    private List<Link> links = new ArrayList<>();
 
     /**
      * Empty constructor
@@ -80,6 +88,15 @@ public class Point implements Serializable {
         return (name != null && hint != null && (Double.toString(longitude) != null) && (Double.toString(latitude) != null));
     }
 
+    /**
+     * Method to add a link
+     * @param uri uri link
+     * @param rel name
+     */
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(rel, uri));
+    }
+
     public double getLongitude() {
         return longitude;
     }
@@ -126,5 +143,9 @@ public class Point implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Link> getLinks() {
+        return links;
     }
 }
