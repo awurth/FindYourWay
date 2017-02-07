@@ -24,26 +24,21 @@ export default function route ($stateProvider) {
       url: '/admin',
       template: require('./app/admin/admin.html')
     })
-    .state('admin.points', {
+    .state('admin.questions', {
       url: '/points',
-      template: require('./app/admin/points.html'),
-      controller: 'AdminPointsCtrl'
+      template: require('./app/admin/questions.html'),
+      controller: 'AdminQuestionsCtrl'
     })
-    .state('admin.points.add', {
+    .state('admin.questions.add', {
       url: '/add',
-      template: require('./app/admin/point-form.html'),
-      controller: 'AdminAddPointCtrl'
+      template: require('./app/admin/questions.add.html'),
+      controller: 'AdminAddQuestionCtrl'
     })
-    .state('admin.points.edit', {
+    /* .state('admin.questions.edit', {
       url: '/{id}/edit',
-      template: require('./app/admin/point-form.html'),
-      controller: 'AdminEditPointCtrl'
-    })
-    .state('admin.destinations', {
-      url: '/destinations',
-      template: require('./app/admin/destinations.html'),
-      controller: 'AdminDestinationsCtrl'
-    })
+      template: require('./app/admin/question-form.html'),
+      controller: 'AdminEditQuestionCtrl'
+    }) */
     .state('game', {
       url: '/game',
       template: require('./app/game/game.html'),

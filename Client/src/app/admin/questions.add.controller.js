@@ -1,5 +1,5 @@
 
-export default function AdminAddPointController ($scope, $state, NgMap, Point) {
+export default function AdminAddPointController ($scope, $state, NgMap, Question) {
   $scope.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBevGWdiDClK7DvnpjA0l96DcaIp_NqD6g'
   $scope.point = {}
 
@@ -11,12 +11,6 @@ export default function AdminAddPointController ($scope, $state, NgMap, Point) {
       })
     })
   })
-
-  $scope.save = () => {
-    Point.save($scope.point, () => {
-      $state.go('admin.points')
-    })
-  }
 }
 
-AdminAddPointController.$inject = ['$scope', '$state', 'NgMap', 'Point']
+AdminAddPointController.$inject = ['$scope', '$state', 'NgMap', 'Question']
