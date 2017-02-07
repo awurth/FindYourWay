@@ -1,5 +1,6 @@
 package boundary.Point;
 
+import boundary.Representation;
 import entity.Point;
 
 import javax.ejb.EJB;
@@ -17,7 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/point")
-public class PointRepresentation {
+public class PointRepresentation extends Representation {
 
     @EJB
     private PointResource pointResource;
@@ -42,33 +43,24 @@ public class PointRepresentation {
     @POST
     public Response add(@Context UriInfo uriInfo, Point point) {
          if (point == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Error : you sent an empty object")
-                    .build();
-         
-         point = pointResource.insert(point);
-       
+             flash(400, EMPTY_JSON);
+
+        point = pointResource.insert(point);
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
     
     @PUT
     public Response update(Point point) {
         if (point == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("You sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
         
         point = pointResource.findById(point.getId());
+
         if (point == null)
             return Response.noContent().build();
 
         if (point.isValid())
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Invalid object")
-                    .build();
+            flash(400, EMPTY_JSON);
 
         pointResource.update(point);
         return Response.status(Response.Status.NO_CONTENT).build();

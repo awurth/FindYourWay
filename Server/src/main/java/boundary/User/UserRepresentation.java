@@ -1,5 +1,6 @@
 package boundary.User;
 
+import boundary.Representation;
 import control.PasswordManagement;
 import entity.User;
 import entity.UserRole;
@@ -15,7 +16,7 @@ import java.util.List;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserRepresentation {
+public class UserRepresentation extends Representation {
 
     @EJB
     UserResource userResource;
@@ -45,10 +46,7 @@ public class UserRepresentation {
             return Response.status(Response.Status.NOT_FOUND).build();
 
         if (userResource.findByEmail(user.getEmail()) != null)
-            return Response.status(409)
-                    .type("text/plain")
-                    .entity("This email address is already used")
-                    .build();
+            flash(409, "This email address is already used");
 
         try {
             userResource.insert(new User(user.getName(), user.getEmail(), PasswordManagement.digestPassword(user.getPassword())));

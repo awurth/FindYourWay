@@ -1,5 +1,7 @@
 package boundary.Score;
 
+import boundary.Question.QuestionResource;
+import boundary.Representation;
 import boundary.User.UserResource;
 import entity.Score;
 import entity.User;
@@ -22,13 +24,16 @@ import javax.ws.rs.core.*;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ScoreRepresentation {
+public class ScoreRepresentation extends Representation {
     
     @EJB
     private ScoreResource scoreResource;
 
     @EJB
     private UserResource userResource;
+
+    @EJB
+    private QuestionResource questionResource;
     
     @GET
     public Response get() {
@@ -40,21 +45,18 @@ public class ScoreRepresentation {
     @Secured({UserRole.CUSTOMER})
     public Response add(@Context SecurityContext securityContext, Score score) {
         if(score == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("You sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
 
         if (!score.isValid())
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("One or many fields have not been filled, also be sure the score is greater than 0")
-                    .build();
+            flash(400, MISSING_FIELDS + ", also be sure the score is greater than 0");
 
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
         if (!score.getUser().equals(user))
             return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        if (questionResource.findById(score.getQuestion().getId()) == null)
+            flash(404, "Error : Question does not exist");
 
         score = scoreResource.insert(score);
         
@@ -65,10 +67,7 @@ public class ScoreRepresentation {
     @Secured({UserRole.CUSTOMER})
     public Response delete(@Context SecurityContext securityContext, Score score) {
         if(score == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("You sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
         
         if(scoreResource.findById(score.getId()) == null) 
             return Response.noContent().build();
@@ -86,10 +85,7 @@ public class ScoreRepresentation {
     @Secured({UserRole.CUSTOMER})
     public Response update(@Context SecurityContext securityContext, Score score) {
         if(score == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("You sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
         
         score = scoreResource.findById(score.getId());
 
@@ -103,7 +99,11 @@ public class ScoreRepresentation {
 
         if (!score.getUser().equals(user))
             return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        if (questionResource.findById(score.getQuestion().getId()) == null)
+            flash(404, "Error : Question does not exist");
         
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
 }
