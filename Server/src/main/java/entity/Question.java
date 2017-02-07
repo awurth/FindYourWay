@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class Question implements Serializable {
 
     @OneToMany
     private List<Point> points = new ArrayList<>(PATH_LENGTH);
+
+    @Transient
+    @XmlElement(name="_links")
+    private List<Link> links = new ArrayList<>();
 
     /**
      * Empty Constructor
@@ -91,6 +96,15 @@ public class Question implements Serializable {
         return true;
     }
 
+    /**
+     * Method to add a link
+     * @param uri uri link
+     * @param rel name
+     */
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(rel, uri));
+    }
+
     public String getId() {
         return id;
     }
@@ -105,6 +119,10 @@ public class Question implements Serializable {
 
     public void setPoints(List<Point> points) {
         this.points = points;
+    }
+
+    public List<Link> getLinks() {
+        return links;
     }
 
 }

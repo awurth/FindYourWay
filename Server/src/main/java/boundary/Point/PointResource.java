@@ -3,14 +3,22 @@ package boundary.Point;
 import entity.Point;
 
 import javax.ejb.Stateless;
+import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Stateless
 public class PointResource {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    public List<Point> findAll() {
+        return entityManager.createNamedQuery("Question.findAll", Point.class)
+                .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
+                .getResultList();
+    }
 
     /**
      * Method to find a Point by its id
