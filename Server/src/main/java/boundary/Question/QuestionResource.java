@@ -1,8 +1,10 @@
 package boundary.Question;
 
+import boundary.Score.ScoreResource;
 import entity.Question;
 import entity.Point;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
@@ -14,6 +16,9 @@ public class QuestionResource {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    @EJB
+    ScoreResource scoreResource;
 
     /**
      * Method to find a Question by id
@@ -45,14 +50,18 @@ public class QuestionResource {
     }
 
     /**
-     * Method to delete a question and its points
-     * @param path the Question to delete
+     * Method to delete a question, its points and its scores
+     * @param question the Question to delete
      */
-    public void delete(Question path) {
-        for (Point point : path.getPoints())
+    public void delete(Question question) {
+        for (Point point : question.getPoints())
             entityManager.remove(point);
 
-        entityManager.remove(path);
+        scoreResource.findByQuestion(question).parallelStream().forEach(score -> {
+            scoreResource.delete(score);
+        });
+
+        entityManager.remove(question);
     }
 
 }
