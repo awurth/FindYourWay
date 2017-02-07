@@ -1,6 +1,6 @@
 
 export default function Point ($resource, API) {
-  return $resource(API.url + '/points/:id', { id: '@id' }, {
+  return $resource(API.url + 'points/:id', { id: '@id' }, {
     update: { method: 'PUT' }
   })
 }
