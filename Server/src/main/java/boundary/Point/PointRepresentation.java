@@ -10,7 +10,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import static javax.ws.rs.HttpMethod.PUT;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -47,5 +49,26 @@ public class PointRepresentation {
          point = pointResource.insert(point);
        
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
+    }
+    
+     @PUT
+    public Response update(Point point) {
+        
+        if(point == null)
+            return Response.status(400)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity("You sent an empty object")
+                    .build();
+        
+        point = pointResource.findById(point.getId());
+        if(point == null) 
+            return Response.noContent().build();
+        
+        Double lat = point.getLatitude();
+        Double lon = point.getLongitude();
+        if((point.getLinks() == null) || (lat == null) || (lon == null)) 
+            return Response.status(404).entity("Not Found").build();
+        
+        return Response.status(204).build();
     }
 }

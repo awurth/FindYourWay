@@ -59,7 +59,11 @@ public class ScoreResource {
          entityManager.remove(score);
     }
     
-    
+    /**
+     * Method to update a score
+     * @param score
+     * @return the updated score
+     */
     public Score update(Score score) {
         return entityManager.merge(score);
     }
