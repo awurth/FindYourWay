@@ -1,4 +1,4 @@
-package boundary.Account;
+package boundary.User;
 
 import control.KeyGenerator;
 

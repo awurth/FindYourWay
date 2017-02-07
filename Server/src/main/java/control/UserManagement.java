@@ -1,6 +1,6 @@
 package control;
 
-import boundary.Account.UserResource;
+import boundary.User.UserResource;
 import entity.User;
 import provider.AuthenticatedUser;
 

@@ -1,4 +1,4 @@
-package boundary.Account;
+package boundary.User;
 
 import control.PasswordManagement;
 import entity.User;
@@ -20,8 +20,10 @@ public class UserRepresentation {
     @EJB
     UserResource userResource;
 
-
-    public Response get(String email) {
+    @GET
+    @Secured({UserRole.ADMIN})
+    @Path("/{email}")
+    public Response get(@PathParam("email") String email) {
         User user = userResource.findByEmail(email);
         if (user != null)
             return Response.ok(user, MediaType.APPLICATION_JSON).build();
