@@ -39,5 +39,14 @@ public class PointResource {
         point.generateId();
         return entityManager.merge(point);
     }
+    
+    /**
+     * Method to update a point
+     * @param point
+     * @return the updated point
+     */
+    public Point update(Point point) {
+        return entityManager.merge(point);
+    }
 
 }
