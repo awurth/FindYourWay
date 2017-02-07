@@ -57,9 +57,18 @@ public class QuestionRepresentation {
     @DELETE
     public Response delete(Question question) {
         
+        if (question == null)
+            return Response.status(400)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity("Error : you sent an empty object")
+                    .build();
+        
+        if (pathResource.findById(question.getId()) == null)
+            return Response.noContent().build();
+        
         pathResource.delete(question);
         
-        return Response.ok(question, MediaType.APPLICATION_JSON).build();
+        return Response.status(204).build();
     }
 
 }
