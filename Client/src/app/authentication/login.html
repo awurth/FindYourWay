@@ -1,10 +1,10 @@
 <div class="container">
   <h1>Sign in</h1>
-  <form name="loginForm" ng-submit="register(registrationForm.$valid)">
+  <form name="loginForm" ng-submit="login(loginForm.$valid)">
     <div class="form-group" name="registrationForm" ng-submit="register(registrationForm.$valid)">
-      <label for="username">Username</label>
-      <input type="text" name="username" id="username" class="form-control" ng-model="user.username">
-      <div ng-messages="name=loginForm.username.$error">
+      <label for="email">Email</label>
+      <input type="text" name="email" id="username" class="form-control" ng-model="user.email">
+      <div ng-messages="name=loginForm.email.$error">
         <div ng-messages-include="partials/messages.html"></div>
       </div>
     </div>

@@ -37,11 +37,13 @@ public class AuthenticationEndpoint {
     private UriInfo uriInfo;
 
     @POST
-
+    @Produces(MediaType.APPLICATION_JSON)
     public Response authenticateUser(User user) {
+        System.out.println(user);
         try {
             authenticate(user.getEmail(), user.getPassword());
-            return Response.ok().header(AUTHORIZATION, "Bearer " + issueToken(user.getEmail())).build();
+            Token token = new Token(issueToken(user.getEmail()));
+            return Response.ok(token , MediaType.APPLICATION_JSON).build();
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).type("text/plain").entity("Invalid credentials").build();
         }
@@ -52,7 +54,7 @@ public class AuthenticationEndpoint {
      * @param email
      * @param password
      * @throws NotAuthorizedException if the credentials are invalid
-     */
+     */ 
     private void authenticate(String email, String password) throws NotAuthorizedException {
         User user = accountResource.findByEmail(email);
 

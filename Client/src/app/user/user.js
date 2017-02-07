@@ -4,7 +4,7 @@ export default function User ($resource, API) {
     update: { method: 'PUT' },
     login: {
       method: 'POST',
-      url: API.url + '/login'
+      url: API.url + '/authentication'
     },
     register: {
       method: 'POST',

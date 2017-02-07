@@ -1,5 +1,4 @@
 export default function CompareTo () {
-  console.log('lkkl')
   return {
     require: 'ngModel',
     scope: {

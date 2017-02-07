@@ -1,4 +1,3 @@
-
 export default function LoginController ($scope, AuthService, $state) {
   $scope.user = {}
 
