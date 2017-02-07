@@ -59,4 +59,8 @@ public class ScoreResource {
          entityManager.remove(score);
     }
     
+    
+    public Score update(Score score) {
+        return entityManager.merge(score);
+    }
 }
