@@ -16,7 +16,7 @@ public class Point implements Serializable {
     private double latitude;
     private String name;
     private String hint;
-    private boolean isFinal = false;
+    private boolean isFinal;
 
     /**
      * Empty constructor
@@ -28,12 +28,28 @@ public class Point implements Serializable {
      * @param longitude x
      * @param latitude y
      * @param hint (image url)
+     * @param aFinal : answer if the point is the final one
+     */
+    public Point(String name, double longitude, double latitude, String hint, boolean aFinal) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.hint = hint;
+        this.name = name;
+        isFinal = aFinal;
+    }
+
+    /**
+     * Constructor for a Point without isFinal attribute
+     * @param longitude x
+     * @param latitude y
+     * @param hint (image url)
      */
     public Point(String name, double longitude, double latitude, String hint) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.hint = hint;
         this.name = name;
+        isFinal = false;
     }
 
     /**
@@ -45,6 +61,7 @@ public class Point implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.name = name;
+        isFinal = false;
     }
 
     /**
@@ -52,7 +69,15 @@ public class Point implements Serializable {
      * this method also removes hyphens
      */
     public void generateId() {
-        id = UUID.fromString(UUID.randomUUID().toString()).toString();
+        id = UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    /**
+     * Helper method to know if critical fields have been filled
+     * @return if the point is valid
+     */
+    public boolean isValid() {
+        return (name != null && hint != null && (Double.toString(longitude) != null) && (Double.toString(latitude) != null));
     }
 
     public double getLongitude() {

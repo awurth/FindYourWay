@@ -32,21 +32,22 @@ public class QuestionRepresentation {
 
     @POST
     public Response add(Question question) {
-
-        for (Point point : question.getPoints()) {
-            if (pointResource.findById(point.getId()) == null)
-                return Response.status(400)
-                        .type(MediaType.TEXT_PLAIN_TYPE)
-                        .entity("One or many points do not exist")
-                        .build();
-            // ToDo : Links to Point + Add Link List in Question
-        }
-
-        if (question.getPoints().size() == Question.PATH_LENGTH)
+        if (question == null)
             return Response.status(400)
                     .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Your question does not have enough point (" + Question.PATH_LENGTH + " required)")
+                    .entity("Error : you sent an empty object")
                     .build();
+
+        if (!question.isPointsValid())
+                return Response.status(400)
+                        .type(MediaType.TEXT_PLAIN_TYPE)
+                        .entity("Error : make sure you correctly created your points, only one point can be final and check you didn't add more than " + Question.PATH_LENGTH + " points.")
+                        .build();
+
+        for (Point point : question.getPoints()) {
+            pointResource.insert(point);
+            // ToDo : Links to Point + Add Link List in Question
+        }
 
 
         question = pathResource.insert(question);
