@@ -22,7 +22,7 @@ import GameController from './app/game/game.controller'
 
 export default angular.module('app', [resource, router, ngMap])
   .constant('API', {
-    url: 'http://localhost:8080/workshop-2/api/'
+    url: 'http://localhost:8080/findyourway/api/'
   })
   .factory('User', User)
   .service('JWTService', JWTService)
