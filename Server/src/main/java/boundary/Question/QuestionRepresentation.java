@@ -1,5 +1,6 @@
 package boundary.Question;
 
+import boundary.Point.PointRepresentation;
 import boundary.Point.PointResource;
 import entity.Point;
 import entity.Question;
@@ -7,9 +8,7 @@ import entity.Question;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.List;
 
 @Path("/question")
@@ -19,19 +18,30 @@ import java.util.List;
 public class QuestionRepresentation {
 
     @EJB
-    private QuestionResource pathResource;
+    private QuestionResource questionResource;
 
     @EJB
     private PointResource pointResource;
 
     @GET
-    public Response get() {
-        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(pathResource.findAll()){};
+    public Response get(@Context UriInfo uriInfo) {
+      List<Question> questions = questionResource.findAll();
+       questions.parallelStream().forEach(question -> {
+           question.getLinks().clear();
+           question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
+           question.getPoints().forEach(point -> {
+               point.getLinks().clear();
+               point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+           });
+       });
+
+        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions){};
+
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
-    public Response add(Question question) {
+    public Response add(@Context UriInfo uriInfo, Question question) {
         if (question == null)
             return Response.status(400)
                     .type(MediaType.TEXT_PLAIN_TYPE)
@@ -44,15 +54,35 @@ public class QuestionRepresentation {
                         .entity("Error : make sure you correctly created your points, only one point can be final and check you didn't add more than " + Question.PATH_LENGTH + " points.")
                         .build();
 
-        for (Point point : question.getPoints()) {
+
+        question.getLinks().clear();
+        question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
+
+        question.getPoints().forEach(point -> {
             pointResource.insert(point);
-            // ToDo : Point Links + Add Link List in Question
-        }
+            point.getLinks().clear();
+            point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+        });
 
-
-        question = pathResource.insert(question);
+        question = questionResource.insert(question);
 
         return Response.ok(question, MediaType.APPLICATION_JSON).build();
+    }
+
+    private String getUriForSelfPoint(UriInfo uriInfo, Point point) {
+        return uriInfo.getBaseUriBuilder()
+                .path(PointRepresentation.class)
+                .path('/' + point.getId())
+                .build()
+                .toString();
+    }
+
+    private String getUriForSelfQuestion(UriInfo uriInfo, Question question) {
+        return uriInfo.getBaseUriBuilder()
+                .path(PointRepresentation.class)
+                .path('/' + question.getId())
+                .build()
+                .toString();
     }
 
 }
