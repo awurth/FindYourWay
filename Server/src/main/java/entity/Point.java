@@ -55,6 +55,14 @@ public class Point implements Serializable {
         id = UUID.fromString(UUID.randomUUID().toString()).toString();
     }
 
+    /**
+     * Helper method to know if critical fields have been filled
+     * @return if the point is valid
+     */
+    public boolean isValid() {
+        return (name != null && hint != null && (Double.toString(longitude) != null) && (Double.toString(latitude) != null));
+    }
+
     public double getLongitude() {
         return longitude;
     }

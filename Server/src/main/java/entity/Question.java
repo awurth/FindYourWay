@@ -36,6 +36,41 @@ public class Question implements Serializable {
     }
 
     /**
+     * Method to find the final point in a question
+     * @return final point
+     */
+    public Point findFinal() {
+        for (Point point : points) {
+            if (point.isFinal())
+                    return point;
+        }
+        return null;
+    }
+
+    /**
+     * Method to check if points are okay : check if
+     *  - the length is okay
+     *  - the points are valid
+     *  - there is a final point and if the question does not have many
+     * @return if it's valid
+     */
+    public boolean isPointsValid() {
+        int counter = 0;
+
+        if (points.size() != PATH_LENGTH)
+            return false;
+
+        for (Point point : points) {
+            if (!point.isValid())
+                return false;
+            if (point.isFinal())
+                counter++;
+        }
+
+        return (counter == 0 || counter > 1);
+    }
+
+    /**
      * Helper method to generate an id and set it to this.id
      * this method also removes hyphens
      */
