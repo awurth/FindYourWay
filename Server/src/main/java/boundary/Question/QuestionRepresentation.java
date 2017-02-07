@@ -53,5 +53,28 @@ public class QuestionRepresentation {
 
         return Response.ok(question, MediaType.APPLICATION_JSON).build();
     }
+    
+    @DELETE
+    public Response delete(Question question) {
+        
+        for(Point point : question.getPoints()) {
+            if(pointResource.findById(point.getId()) == null) {
+                return Response.status(400)
+                        .type(MediaType.TEXT_PLAIN_TYPE)
+                        .entity("One or many points do not exist")
+                        .build();
+            }
+        }
+        
+        if(question.getPoints().size() == Question.PATH_LENGTH)
+            return Response.status(400)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity("Your question does not have enough point ("+Question.PATH_LENGTH+" required)")
+                    .build();
+        
+        pathResource.delete(question);
+        
+        return Response.ok(question, MediaType.APPLICATION_JSON).build();
+    }
 
 }
