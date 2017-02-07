@@ -8,7 +8,7 @@ export default function User ($resource, API) {
     },
     register: {
       method: 'POST',
-      url: API.url + '/register'
+      url: API.url + '/user/signup'
     }
   })
 }

@@ -4,6 +4,7 @@ import angular from 'angular'
 import resource from 'angular-resource'
 import router from 'angular-ui-router'
 import ngMap from 'ngmap'
+import ngMessages from 'angular-messages'
 
 import config from './config'
 import JWTService from './app/authentication/jwt.service'
@@ -12,12 +13,13 @@ import User from './app/user/user'
 import LoginController from './app/authentication/login.controller'
 import RegisterController from './app/authentication/register.controller'
 import TopbarDirective from './app/topbar/topbar.directive'
+import CompareTo from './app/authentication/compareTo.directive'
 import HomeController from './app/home/home.controller'
 import GameController from './app/game/game.controller'
 
-export default angular.module('app', [resource, router, ngMap])
+export default angular.module('app', [resource, router, ngMap, ngMessages])
   .constant('API', {
-    url: 'http://localhost:8080/workshop-2/api/'
+    url: 'http://localhost:8080/findyourway/api'
   })
   .factory('User', User)
   .service('JWTService', JWTService)
@@ -26,5 +28,6 @@ export default angular.module('app', [resource, router, ngMap])
   .controller('LoginCtrl', LoginController)
   .controller('RegisterCtrl', RegisterController)
   .directive('topbar', TopbarDirective)
+  .directive('compareTo', CompareTo)
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)
