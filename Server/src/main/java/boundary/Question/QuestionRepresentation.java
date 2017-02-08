@@ -11,7 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
 
-@Path("/question")
+@Path("/questions")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ public class QuestionRepresentation {
         return Response.ok(question, MediaType.APPLICATION_JSON).build();
     }
     
-    @DELETE
+    /* @DELETE
     public Response delete(Question question) {
         
         if (question == null)
@@ -84,7 +84,7 @@ public class QuestionRepresentation {
         pathResource.delete(question);
         
         return Response.status(204).build();
-    }
+    } */
 
     private String getUriForSelfPoint(UriInfo uriInfo, Point point) {
         return uriInfo.getBaseUriBuilder()

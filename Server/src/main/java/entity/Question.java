@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final int PATH_LENGTH = 5;
+    public static final int PATH_LENGTH = 6;
 
     @Id
     private String id;
