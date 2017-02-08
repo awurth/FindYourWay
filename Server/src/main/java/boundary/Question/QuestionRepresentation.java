@@ -11,7 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
 
-@Path("/question")
+@Path("/questions")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -38,6 +38,17 @@ public class QuestionRepresentation {
         GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions){};
 
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response get(@PathParam("id") String id) {
+        Question question = questionResource.findById(id);
+
+        if (question == null)
+            return Response.noContent().build();
+
+        return Response.ok(question, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
