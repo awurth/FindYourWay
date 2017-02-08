@@ -1,6 +1,6 @@
 <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{ googleMapsUrl }}">
   <ng-map center="48.866, 2.333" zoom="5">
-    <marker ng-repeat="p in points" position="[{{ p.latitude }}, {{ p.longitude }}]" title="{{ p.name }}"></marker>
+    <marker ng-repeat="p in points" position="[{{ p.latitude }}, {{ p.longitude }}]" title="{{ p.name }}" icon="{{ p.final ? flagIconUrl : '' }}"></marker>
   </ng-map>
 </div>
 <table class="table table-striped table-hover" ng-if="points.length > 0">

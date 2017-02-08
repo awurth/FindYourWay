@@ -1,6 +1,7 @@
 
 export default function AdminAddQuestionController ($scope, $state, NgMap, Question) {
   $scope.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBevGWdiDClK7DvnpjA0l96DcaIp_NqD6g'
+  $scope.flagIconUrl = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
   $scope.pointsCount = 6
   $scope.points = []
   $scope.point = {}
