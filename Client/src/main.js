@@ -4,6 +4,7 @@ import angular from 'angular'
 import resource from 'angular-resource'
 import router from 'angular-ui-router'
 import ngMap from 'ngmap'
+import ngMessages from 'angular-messages'
 
 import config from './config'
 import JWTService from './app/authentication/jwt.service'
@@ -15,10 +16,11 @@ import RegisterController from './app/authentication/register.controller'
 import AdminQuestionsController from './app/admin/questions.controller'
 import AdminAddQuestionController from './app/admin/questions.add.controller'
 import TopbarDirective from './app/topbar/topbar.directive'
+import CompareTo from './app/authentication/compareTo.directive'
 import HomeController from './app/home/home.controller'
 import GameController from './app/game/game.controller'
 
-export default angular.module('app', [resource, router, ngMap])
+export default angular.module('app', [resource, router, ngMap, ngMessages])
   .constant('API', {
     url: 'http://localhost:8080/findyourway/api/'
   })
@@ -32,5 +34,6 @@ export default angular.module('app', [resource, router, ngMap])
   .controller('AdminAddQuestionCtrl', AdminAddQuestionController)
   .factory('Question', Question)
   .directive('topbar', TopbarDirective)
+  .directive('compareTo', CompareTo)
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)

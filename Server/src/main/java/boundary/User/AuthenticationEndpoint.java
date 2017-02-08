@@ -1,14 +1,20 @@
 package boundary.User;
 
+import com.sun.xml.internal.txw2.annotation.XmlElement;
 import control.KeyGenerator;
 
 import entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.mindrot.jbcrypt.BCrypt;
+import scala.util.parsing.json.JSONObject;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.persistence.Entity;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -37,11 +43,11 @@ public class AuthenticationEndpoint {
     private UriInfo uriInfo;
 
     @POST
-
     public Response authenticateUser(User user) {
         try {
             authenticate(user.getEmail(), user.getPassword());
-            return Response.ok().header(AUTHORIZATION, "Bearer " + issueToken(user.getEmail())).build();
+            JsonObject token = Json.createObjectBuilder().add("token", issueToken(user.getEmail())).build();
+            return Response.ok(token , MediaType.APPLICATION_JSON).build();
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).type("text/plain").entity("Invalid credentials").build();
         }
@@ -52,7 +58,7 @@ public class AuthenticationEndpoint {
      * @param email
      * @param password
      * @throws NotAuthorizedException if the credentials are invalid
-     */
+     */ 
     private void authenticate(String email, String password) throws NotAuthorizedException {
         User user = accountResource.findByEmail(email);
 
