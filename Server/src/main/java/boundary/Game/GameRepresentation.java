@@ -53,9 +53,10 @@ public class GameRepresentation extends Representation {
        if (game == null)
             flash(404, "Error : Game does not exist");
 
-       String emailsOwner = securityContext.getUserPrincipal().getName();
+       String currentEmail = securityContext.getUserPrincipal().getName();
+       String ownersEmail = game.getUser().getEmail();
 
-       if (! game.getUser().getEmail().equals(emailsOwner))
+       if (!ownersEmail.equals(currentEmail))
            return Response.status(Response.Status.UNAUTHORIZED).build();
 
        return Response.ok(game, MediaType.APPLICATION_JSON).build();
@@ -89,12 +90,20 @@ public class GameRepresentation extends Representation {
     
 
     @DELETE
-    public Response delete(Game game) {
-        if(game == null)
-            flash(400, EMPTY_JSON);
-        
-        if (gameResource.findById(game.getId()) == null)
-            return Response.noContent().build();
+    @Path("/{id}")
+    @Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Delete a game by its id", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response delete(@PathParam("id") String id) {
+        Game game = gameResource.findById(id);
+
+        if (game == null)
+            flash(404, "Error : Game does not exist");
 
         gameResource.delete(game);
 
