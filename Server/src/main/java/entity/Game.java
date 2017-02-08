@@ -1,44 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Partie.findAll", query = "SELECT p FROM Partie p"),
-    @NamedQuery(name = "Partie.findById", query = "SELECT p FROM Partie p WHERE p.id = :id")
+    @NamedQuery(name = "Game.findAll", query = "SELECT g FROM Game g"),
+    @NamedQuery(name = "Game.findById", query = "SELECT g FROM Game g WHERE g.id = :id")
 })
 public class Game implements Serializable {
     
     @Id
     private String id;
-    
-    private Question points;
-    
-    //pourra changer si on implémente différents modes de difficulté
-    private long distanceMin;
-   
+
+    @ManyToOne
+    private Question question;
+
     @OneToOne
-    private User joueur;
+    private User user;
+
+    private long minimumDistance;
     
+    /**
+     * Empty Constructor
+     */
     public Game() {}
     
-    public Game(long dmin, Question q, User u) {
-        this.distanceMin = dmin;
-        this.points = q;
-        this.joueur = u;
+    public Game(long minimumDistance, Question question, User user) {
+        this.minimumDistance = minimumDistance;
+        this.question = question;
+        this.user = user;
     }
     
     /**
@@ -50,8 +44,7 @@ public class Game implements Serializable {
     }
     
     public boolean isValid() {
-        Long l = distanceMin;
-        return (points != null && l != null && joueur != null);
+        return (question != null && minimumDistance >= 0 && user != null);
     }
 
     public String getId() {
@@ -62,30 +55,27 @@ public class Game implements Serializable {
         this.id = id;
     }
 
-    public Question getPoints() {
-        return points;
+    public Question getQuestion() {
+        return question;
     }
 
-    public void setPoints(Question points) {
-        this.points = points;
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
-    public long getDistanceMin() {
-        return distanceMin;
+    public User getUser() {
+        return user;
     }
 
-    public void setDistanceMin(long distanceMin) {
-        this.distanceMin = distanceMin;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public User getJoueur() {
-        return joueur;
+    public long getMinimumDistance() {
+        return minimumDistance;
     }
 
-    public void setJoueur(User joueur) {
-        this.joueur = joueur;
+    public void setMinimumDistance(long minimumDistance) {
+        this.minimumDistance = minimumDistance;
     }
-    
-    
-    
 }
