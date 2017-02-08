@@ -17,7 +17,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
-@Path("/point")
+@Path("/points")
 public class PointRepresentation extends Representation {
 
     @EJB
