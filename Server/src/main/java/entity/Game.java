@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -27,9 +27,10 @@ public class Game implements Serializable {
     
     private Question points;
     
+    //pourra changer si on implémente différents modes de difficulté
     private long distanceMin;
-    
-    @OneToMany
+   
+    @OneToOne
     private User joueur;
     
     public Game() {}
@@ -46,6 +47,11 @@ public class Game implements Serializable {
      */
     public void generateId() {
         id = UUID.randomUUID().toString().replaceAll("-", "");;
+    }
+    
+    public boolean isValid() {
+        Long l = distanceMin;
+        return (points != null && l != null && joueur != null);
     }
 
     public String getId() {
