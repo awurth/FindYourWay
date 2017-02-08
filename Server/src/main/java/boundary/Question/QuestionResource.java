@@ -1,9 +1,10 @@
 package boundary.Question;
 
+import boundary.Score.ScoreResource;
 import entity.Question;
 import entity.Point;
 
-import javax.ejb.DuplicateKeyException;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
@@ -16,8 +17,11 @@ public class QuestionResource {
     @PersistenceContext
     EntityManager entityManager;
 
+    @EJB
+    ScoreResource scoreResource;
+
     /**
-     * Method to find a Path by id
+     * Method to find a Question by id
      * @param id
      * @return Path
      */
@@ -26,34 +30,38 @@ public class QuestionResource {
     }
 
     /**
-     * Method to get all the paths
-     * @return List of Path
+     * Method to get all the questions
+     * @return List of Questions
      */
     public List<Question> findAll() {
-        return entityManager.createNamedQuery("Path.findAll", Question.class)
+        return entityManager.createNamedQuery("Question.findAll", Question.class)
                 .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
                 .getResultList();
     }
 
     /**
-     * Method that inserts a path into the database
-     * @param path to add
-     * @return the path added
+     * Method that inserts a question into the database
+     * @param question to add
+     * @return the question added
      */
-    public Question insert(Question path){
-        return entityManager.merge(path);
+    public Question insert(Question question){
+        question.generateId();
+        return entityManager.merge(question);
     }
 
     /**
-     * Method to delete a path and its points
-     * @param path the Path to delete
+     * Method to delete a question, its points and its scores
+     * @param question the Question to delete
      */
-    public void delete(Question path) {
-        for (Point point : path.getPoints())
+    public void delete(Question question) {
+        for (Point point : question.getPoints())
             entityManager.remove(point);
 
-        entityManager.remove(path);
-    }
+        scoreResource.findByQuestion(question).parallelStream().forEach(score -> {
+            scoreResource.delete(score);
+        });
 
+        entityManager.remove(question);
+    }
 
 }
