@@ -1,6 +1,6 @@
 
-export default function User ($resource, API) {
-  return $resource(API.url + 'users/:id', { id: '@id' }, {
+export default function Score ($resource, API) {
+  return $resource(API.url + 'scores/:id', { id: '@id' }, {
     update: { method: 'PUT' },
     login: {
       method: 'POST',
@@ -13,4 +13,4 @@ export default function User ($resource, API) {
   })
 }
 
-User.$inject = ['$resource', 'API']
+Score.$inject = ['$resource', 'API']
