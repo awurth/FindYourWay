@@ -49,4 +49,12 @@ public class PointResource {
         return entityManager.merge(point);
     }
 
+    /**
+     * Method to delete a point
+     * @param point
+     */
+    public void delete(Point point) {
+        entityManager.remove(point);
+    }
+
 }
