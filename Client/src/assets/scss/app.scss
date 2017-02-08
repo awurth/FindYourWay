@@ -5,6 +5,18 @@ body {
   padding-top: 70px;
 }
 
+.topbar {
+  @extend .navbar, .navbar-default, .navbar-fixed-top;
+
+  .right.menu {
+    @extend .nav, .navbar-nav, .navbar-right
+  }
+}
+
+/*********************************************/
+/* ---------- BOOTSTRAP OVERRIDES ---------- */
+/*********************************************/
+
 .right.aligned {
   @extend .text-right;
 }
