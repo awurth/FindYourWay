@@ -42,11 +42,20 @@ public class QuestionRepresentation {
 
     @GET
     @Path("/{id}")
-    public Response get(@PathParam("id") String id) {
+    public Response get(@Context UriInfo uriInfo, @PathParam("id") String id) {
         Question question = questionResource.findById(id);
 
         if (question == null)
             return Response.noContent().build();
+
+        List<Point> points = question.getPoints();
+        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
+        for (Point point : points) {
+            point.getLinks().clear();
+            point.addLink(this.getUriForSelfPoint(uriInfo, point), "self");
+        }
+
+        question.setPoints(points);
 
         return Response.ok(question, MediaType.APPLICATION_JSON).build();
     }

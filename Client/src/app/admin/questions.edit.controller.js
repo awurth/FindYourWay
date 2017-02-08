@@ -1,7 +1,9 @@
 
-export default function AdminEditQuestionController ($scope, $state, NgMap, Question) {
+export default function AdminEditQuestionController ($scope, $state, $stateParams, NgMap, Question) {
   $scope.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBevGWdiDClK7DvnpjA0l96DcaIp_NqD6g'
-  $scope.points = []
+  Question.get({ id: $stateParams.id }, (question) => {
+    $scope.points = question.points
+  })
   $scope.point = {}
   $scope.editIndex = null
 
@@ -50,4 +52,4 @@ export default function AdminEditQuestionController ($scope, $state, NgMap, Ques
   }
 }
 
-AdminEditQuestionController.$inject = ['$scope', '$state', 'NgMap', 'Question']
+AdminEditQuestionController.$inject = ['$scope', '$state', '$stateParams', 'NgMap', 'Question']
