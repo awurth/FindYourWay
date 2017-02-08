@@ -47,13 +47,15 @@ public class QuestionRepresentation {
 
         if (question == null)
             return Response.noContent().build();
+        
+        question.getLinks().clear();
+        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
 
         List<Point> points = question.getPoints();
-        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
-        for (Point point : points) {
-            point.getLinks().clear();
-            point.addLink(this.getUriForSelfPoint(uriInfo, point), "self");
-        }
+        points.parallelStream().forEach(point -> {
+             point.getLinks().clear();
+             point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+        });
 
         question.setPoints(points);
 
