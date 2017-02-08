@@ -20,6 +20,10 @@ public class QuestionResource {
     @EJB
     ScoreResource scoreResource;
 
+    @EJB
+    HintResource hintResource;
+
+
     /**
      * Method to find a Question by id
      * @param id
@@ -50,7 +54,7 @@ public class QuestionResource {
     }
 
     /**
-     * Method to delete a question, its points and its scores
+     * Method to delete a question, its points, its scores and its hints
      * @param question the Question to delete
      */
     public void delete(Question question) {
@@ -59,6 +63,10 @@ public class QuestionResource {
 
         scoreResource.findByQuestion(question).parallelStream().forEach(score -> {
             scoreResource.delete(score);
+        });
+
+        hintResource.findByQuestion(question).parallelStream().forEach(hint -> {
+            hintResource.delete(hint);
         });
 
         entityManager.remove(question);

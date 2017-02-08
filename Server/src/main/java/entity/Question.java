@@ -27,6 +27,9 @@ public class Question implements Serializable {
     @OneToMany
     private List<Point> points = new ArrayList<>(PATH_LENGTH);
 
+    @OneToMany
+    private List<Hint> hints = new ArrayList<>(PATH_LENGTH);
+
     @Transient
     @XmlElement(name="_links")
     private List<Link> links = new ArrayList<>();
@@ -36,8 +39,9 @@ public class Question implements Serializable {
      */
     public Question() {}
 
-    public Question(List<Point> points) {
+    public Question(List<Point> points, List<Hint> hints ) {
         this.points = points;
+        this.hints = hints;
     }
 
     /**
@@ -76,6 +80,22 @@ public class Question implements Serializable {
     }
 
     /**
+     * Method to check if hints are okay
+     * @return if it's valid
+     */
+    public boolean isHintsValid() {
+        if (hints.size() != PATH_LENGTH)
+            return false;
+
+        for (Hint hint : hints) {
+            if (!hint.isValid())
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Helper method to generate an id and set it to this.id
      * this method also removes hyphens
      */
@@ -93,6 +113,19 @@ public class Question implements Serializable {
             return false;
 
         points.add(point);
+        return true;
+    }
+
+    /**
+     * Method to add a hint for the final point
+     * @param hint
+     * @return if it was added
+     */
+    public boolean addHints(Hint hint) {
+        if (hints.size() >= PATH_LENGTH)
+            return false;
+
+        hints.add(hint);
         return true;
     }
 
@@ -125,4 +158,15 @@ public class Question implements Serializable {
         return links;
     }
 
+    public List<Hint> getHints() {
+        return hints;
+    }
+
+    public void setHints(List<Hint> hints) {
+        this.hints = hints;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 }
