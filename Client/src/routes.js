@@ -24,7 +24,11 @@ export default function route ($stateProvider) {
       template: require('./app/admin/admin.html')
     })
     .state('admin.questions', {
-      url: '/questions',
+      abstract: true,
+      url: '/questions'
+    })
+    .state('admin.questions.all', {
+      url: '',
       template: require('./app/admin/questions.html'),
       controller: 'AdminQuestionsCtrl'
     })

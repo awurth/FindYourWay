@@ -1,7 +1,7 @@
 <div class="container">
   <h1>Admin</h1>
   <ul class="nav nav-tabs">
-    <li ui-sref-active="active"><a ui-sref="admin.questions">Questions</a></li>
+    <li ui-sref-active="{'active': 'admin.questions.**'}"><a ui-sref="admin.questions.all">Questions</a></li>
   </ul>
   <ui-view>
     <h3>FindYourWay Administration panel</h3>

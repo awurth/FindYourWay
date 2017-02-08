@@ -78,7 +78,7 @@ export default function AdminEditQuestionController ($scope, $state, $stateParam
   // Save question
   $scope.submitQuestion = () => {
     Question.update({ id: $stateParams.id }, { points: $scope.points }, () => {
-      $state.go('admin.questions')
+      $state.go('admin.questions.all')
     })
   }
 }
