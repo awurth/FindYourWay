@@ -20,7 +20,6 @@ export default function route ($stateProvider) {
     /* ---------- ADMIN ---------- */
     /*******************************/
     .state('admin', {
-      abstract: true,
       url: '/admin',
       template: require('./app/admin/admin.html')
     })
