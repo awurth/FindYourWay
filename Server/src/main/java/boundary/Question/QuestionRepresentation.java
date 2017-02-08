@@ -78,10 +78,10 @@ public class QuestionRepresentation {
                     .entity("Error : you sent an empty object")
                     .build();
         
-        if (pathResource.findById(question.getId()) == null)
+        if (questionResource.findById(question.getId()) == null)
             return Response.noContent().build();
         
-        pathResource.delete(question);
+        questionResource.delete(question);
         
         return Response.status(204).build();
     } */
