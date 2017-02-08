@@ -80,22 +80,24 @@ public class ScoreRepresentation extends Representation {
     public Response update(@PathParam("id") String id, @Context SecurityContext securityContext, Score score) {
         if(score == null)
             flash(400, EMPTY_JSON);
-        
-        Score originalScore = scoreResource.findById(score.getId());
-
-        if(originalScore == null)
-            return Response.noContent().build();
 
         if(!score.isValid())
-            return Response.status(Response.Status.NOT_FOUND).build();
+            flash(400, INVALID_JSON);
 
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
+        Score originalScore = scoreResource.findById(id);
 
-        if (!score.getUser().equals(user))
+        if (originalScore == null)
+            return Response.noContent().build();
+
+        if (!originalScore.getUser().equals(user))
             return Response.status(Response.Status.UNAUTHORIZED).build();
 
         if (questionResource.findById(score.getQuestion().getId()) == null)
             flash(404, "Error : Question does not exist");
+
+        originalScore.update(score);
+        scoreResource.update(score);
         
         return Response.status(Response.Status.NO_CONTENT).build();
     }
