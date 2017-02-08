@@ -47,13 +47,12 @@ public class ScoreRepresentation extends Representation {
         if(score == null)
             flash(400, EMPTY_JSON);
 
-        if (!score.isValid())
-            flash(400, MISSING_FIELDS + ", also be sure the score is greater than 0");
-
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
-        if (!score.getUser().equals(user))
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+        score.setUser(user);
+
+        if (!score.isValid())
+            flash(400, MISSING_FIELDS + ", also be sure the score is greater than 0");
 
         if (questionResource.findById(score.getQuestion().getId()) == null)
             flash(404, "Error : Question does not exist");

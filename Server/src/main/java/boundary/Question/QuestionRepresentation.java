@@ -40,6 +40,17 @@ public class QuestionRepresentation {
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
+    @GET
+    @Path("/{id}")
+    public Response get(@PathParam("id") String id) {
+        Question question = questionResource.findById(id);
+
+        if (question == null)
+            return Response.noContent().build();
+
+        return Response.ok(question, MediaType.APPLICATION_JSON).build();
+    }
+
     @POST
     public Response add(@Context UriInfo uriInfo, Question question) {
         if (question == null)
