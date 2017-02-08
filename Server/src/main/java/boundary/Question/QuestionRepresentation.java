@@ -25,17 +25,18 @@ public class QuestionRepresentation {
 
     @GET
     public Response get(@Context UriInfo uriInfo) {
-      List<Question> questions = questionResource.findAll();
-       questions.parallelStream().forEach(question -> {
-           question.getLinks().clear();
-           question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
-           question.getPoints().forEach(point -> {
-               point.getLinks().clear();
-               point.addLink(getUriForSelfPoint(uriInfo, point), "point");
-           });
-       });
+        List<Question> questions = questionResource.findAll();
+        questions.parallelStream().forEach(question -> {
+            question.getLinks().clear();
+            question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
+            question.getPoints().forEach(point -> {
+                point.getLinks().clear();
+                point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+            });
+        });
 
-        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions){};
+        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions) {
+        };
 
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
@@ -49,7 +50,7 @@ public class QuestionRepresentation {
             return Response.noContent().build();
 
         List<Point> points = question.getPoints();
-        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
+        question.addLink(this.getUriForSelfQuestion(uriInfo, question), "self");
         for (Point point : points) {
             point.getLinks().clear();
             point.addLink(this.getUriForSelfPoint(uriInfo, point), "self");
@@ -69,10 +70,10 @@ public class QuestionRepresentation {
                     .build();
 
         if (!question.isPointsValid())
-                return Response.status(400)
-                        .type(MediaType.TEXT_PLAIN_TYPE)
-                        .entity("Error : make sure you correctly created your points, only one point can be final and check you didn't add more than " + Question.PATH_LENGTH + " points.")
-                        .build();
+            return Response.status(400)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity("Error : make sure you correctly created your points, only one point can be final and check you didn't add more than " + Question.PATH_LENGTH + " points.")
+                    .build();
 
 
         question.getLinks().clear();

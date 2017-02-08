@@ -26,6 +26,7 @@ public class QuestionResource {
 
     /**
      * Method to find a Question by id
+     *
      * @param id
      * @return Path
      */
@@ -35,6 +36,7 @@ public class QuestionResource {
 
     /**
      * Method to get all the questions
+     *
      * @return List of Questions
      */
     public List<Question> findAll() {
@@ -45,16 +47,18 @@ public class QuestionResource {
 
     /**
      * Method that inserts a question into the database
+     *
      * @param question to add
      * @return the question added
      */
-    public Question insert(Question question){
+    public Question insert(Question question) {
         question.generateId();
         return entityManager.merge(question);
     }
 
     /**
      * Method to delete a question, its points, its scores and its hints
+     *
      * @param question the Question to delete
      */
     public void delete(Question question) {

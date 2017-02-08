@@ -14,7 +14,7 @@ import java.util.List;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HintRepresentation extends Representation{
+public class HintRepresentation extends Representation {
     @EJB
     private QuestionResource questionResource;
 
@@ -39,7 +39,7 @@ public class HintRepresentation extends Representation{
 
         List<Hint> hints = hintResource.findByQuestion(question);
 
-        GenericEntity<List<Hint>> list = new GenericEntity<List<Hint>>(hints){};
+        GenericEntity<List<Hint>> list = new GenericEntity<List<Hint>>(hints) {};
 
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
@@ -50,12 +50,12 @@ public class HintRepresentation extends Representation{
             flash(400, EMPTY_JSON);
 
         if (!hint.isValid())
-            flash(400,INVALID_JSON);
+            flash(400, INVALID_JSON);
 
         if (questionResource.findById(hint.getQuestion().getId()) == null)
             flash(400, "Error : question does not exist");
 
-        return Response.ok(hint,MediaType.APPLICATION_JSON).build();
+        return Response.ok(hint, MediaType.APPLICATION_JSON).build();
     }
 
 }
