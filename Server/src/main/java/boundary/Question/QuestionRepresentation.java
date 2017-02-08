@@ -5,6 +5,8 @@ import boundary.Point.PointResource;
 import boundary.Representation;
 import entity.Point;
 import entity.Question;
+import entity.UserRole;
+import provider.Secured;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -87,11 +89,10 @@ public class QuestionRepresentation extends Representation {
     
     @DELETE
     @Path("/{id}")
-    public Response delete(Question question) {
+    public Response delete(@PathParam("id") String id) {
+        Question question = questionResource.findById(id);
+
         if (question == null)
-            flash(400, EMPTY_JSON);
-        
-        if (questionResource.findById(question.getId()) == null)
             return Response.noContent().build();
         
         questionResource.delete(question);
