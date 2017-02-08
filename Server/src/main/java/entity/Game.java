@@ -23,7 +23,7 @@ public class Game implements Serializable {
     private User user;
 
     private long minimumDistance;
-    
+
     /**
      * Empty Constructor
      */
