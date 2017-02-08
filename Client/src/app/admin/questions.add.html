@@ -41,7 +41,7 @@
     </tr>
   </tbody>
 </table>
-<form ng-if="points.length < pointsCount">
+<form ng-if="points.length < pointsCount || editIndex != null">
   <div class="field" ng-class="errors.name ? 'has-error' : ''">
     <label for="name">Name</label>
     <input type="text" id="name" class="input" ng-model="point.name">

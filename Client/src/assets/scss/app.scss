@@ -14,18 +14,19 @@ body {
   }
 }
 
-/*********************************************/
-/* ---------- BOOTSTRAP OVERRIDES ---------- */
-/*********************************************/
 .ng-invalid {
-    border-color: red;
-    outline-color: red;
+  border-color: red;
+  outline-color: red;
 }
 
 .ng-valid {
-    border-color: green;
-    outline-color: green;
+  border-color: green;
+  outline-color: green;
 }
+
+/*********************************************/
+/* ---------- BOOTSTRAP OVERRIDES ---------- */
+/*********************************************/
 
 .messages {
   font-size: smaller;
