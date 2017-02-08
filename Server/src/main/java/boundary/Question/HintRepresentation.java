@@ -2,14 +2,13 @@ package boundary.Question;
 
 import boundary.Representation;
 import entity.Hint;
+import entity.Question;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
+import java.util.List;
 
 @Path("/hints")
 @Stateless
@@ -29,6 +28,20 @@ public class HintRepresentation extends Representation{
         if (hint == null)
             return Response.noContent().build();
         return Response.ok(hint, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/question/{id}")
+    public Response getByQuestion(@PathParam("id") String id) {
+        Question question = questionResource.findById(id);
+        if (question == null)
+            flash(404, "Error : Question does not exist");
+
+        List<Hint> hints = hintResource.findByQuestion(question);
+
+        GenericEntity<List<Hint>> list = new GenericEntity<List<Hint>>(hints){};
+
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
