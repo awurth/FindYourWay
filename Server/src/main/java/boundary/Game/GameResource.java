@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package boundary.Game;
 
 import boundary.Question.QuestionResource;
@@ -25,7 +20,7 @@ public class GameResource {
     private QuestionResource questionResource;
     
     /**
-     * Method to find a Game by id
+     * Method to find a Game by its id
      * @param id
      * @return Game
      */
@@ -35,7 +30,7 @@ public class GameResource {
     
     /**
      * Method to get all the games
-     * @return List of Games
+     * @return List of Game
      */
     public List<Game> findAll() {
         return entityManager.createNamedQuery("Game.findAll", Game.class)
@@ -45,27 +40,20 @@ public class GameResource {
     
     /**
      * Method to insert a Game 
-     * @param g the game to be inserted
+     * @param game
      * @return the game added
      */
-    public Game insert(Game g) {
-        //on génére l'id de la partie
-        g.generateId();
-        //on l'insère dans la base de donnée en revoyant une éventuelle erreur
-        return entityManager.merge(g);
+    public Game insert(Game game) {
+        game.generateId();
+        return entityManager.merge(game);
     }
     
     /**
-     * method to delete a Game, and the question created with
-     * @param g the Game to be deleted
+     * Method to delete a Game
+     * @param game
      */
-    public void delete(Game g) {
-        
-        //on utilise la resource de question pour supprimer la question 
-        questionResource.delete(g.getPoints());
-        
-        //on supprime la partie
-        entityManager.remove(g);
+    public void delete(Game game) {
+        entityManager.remove(game);
     }
     
 }
