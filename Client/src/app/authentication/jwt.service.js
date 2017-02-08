@@ -17,8 +17,6 @@ export default class JWTService {
     // on supprime le token, sinon on actualise la date
     if (date && Date.now() - parseInt(date) > 1800000) {
       this.$window.localStorage.removeItem('token')
-    } else {
-      this.$window.localStorage.setItem('token_date', Date.now())
     }
 
     return this.$window.localStorage.getItem('token')
