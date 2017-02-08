@@ -31,3 +31,9 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .directive('compareTo', CompareTo)
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)
+  .run(['$rootScope', '$transitions', ($rootScope, $transitions) => {
+    $transitions.onStart({}, ($trans) => {
+      var auth = $trans.injector().get('AuthService')
+      $rootScope.loggedIn = auth.check()
+    })
+  }])
