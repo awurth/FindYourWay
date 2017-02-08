@@ -1,22 +1,40 @@
 <div class="container">
   <h1>Sign up</h1>
-  <form>
+  <div ng-show="message">
+    <div class="alert alert-warning">
+      <p>{{message}}</p>
+    </div>
+  </div>
+
+  <form name="registrationForm" ng-submit="register(registrationForm.$valid)">
     <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" id="username" class="form-control" ng-model="user.username">
+      <input type="text" name="username" id="username" class="form-control" ng-model="user.name" required>
+      <div ng-messages="name=registrationForm.username.$error">
+        <div ng-messages-include="partials/messages.html"></div>
+      </div>
     </div>
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="text" id="email" class="form-control" ng-model="user.email">
+      <input type="text" name="email" id="email" class="form-control" ng-model="user.email" required>
+      <div ng-messages="name=registrationForm.email.$error">
+        <div ng-messages-include="partials/messages.html"></div>
+      </div>
     </div>
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" class="form-control" ng-model="user.password">
+      <input type="password" name="password" id="password" class="form-control" ng-model="user.password" required>
+      <div ng-messages="name=registrationForm.password.$error">
+        <div ng-messages-include="partials/messages.html"></div>
+      </div>
     </div>
     <div class="form-group">
       <label for="password-confirm">Confirm password</label>
-      <input type="password" id="password-confirm" class="form-control" ng-model="user.passwordConfirmation">
+      <input type="password" name="confirmPassword" id="password-confirm" class="form-control" ng-model="user.passwordConfirmation" compare-to="user.password">
+      <div ng-messages="name=registrationForm.confirmPassword.$error">
+        <div ng-messages-include="partials/messages.html"></div>
+      </div>
     </div>
-    <input type="submit" class="btn btn-primary" value="Register" ng-click="register()">
+    <input type="submit" class="btn btn-primary" value="Register">
   </form>
 </div>
