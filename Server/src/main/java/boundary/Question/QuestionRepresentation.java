@@ -2,6 +2,7 @@ package boundary.Question;
 
 import boundary.Point.PointRepresentation;
 import boundary.Point.PointResource;
+import boundary.Representation;
 import entity.Point;
 import entity.Question;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class QuestionRepresentation {
+public class QuestionRepresentation extends Representation {
 
     @EJB
     private QuestionResource questionResource;
@@ -47,7 +48,7 @@ public class QuestionRepresentation {
 
         if (question == null)
             return Response.noContent().build();
-        
+
         question.getLinks().clear();
         question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
 
@@ -65,17 +66,10 @@ public class QuestionRepresentation {
     @POST
     public Response add(@Context UriInfo uriInfo, Question question) {
         if (question == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Error : you sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
 
         if (!question.isPointsValid())
-                return Response.status(400)
-                        .type(MediaType.TEXT_PLAIN_TYPE)
-                        .entity("Error : make sure you correctly created your points, only one point can be final and check you didn't add more than " + Question.PATH_LENGTH + " points.")
-                        .build();
-
+            flash(400, INVALID_JSON);
 
         question.getLinks().clear();
         question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
@@ -91,14 +85,11 @@ public class QuestionRepresentation {
         return Response.ok(question, MediaType.APPLICATION_JSON).build();
     }
     
-    /* @DELETE
+    @DELETE
+    @Path("/{id}")
     public Response delete(Question question) {
-        
         if (question == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Error : you sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
         
         if (questionResource.findById(question.getId()) == null)
             return Response.noContent().build();
@@ -106,7 +97,7 @@ public class QuestionRepresentation {
         questionResource.delete(question);
         
         return Response.status(204).build();
-    } */
+    }
 
     private String getUriForSelfPoint(UriInfo uriInfo, Point point) {
         return uriInfo.getBaseUriBuilder()
