@@ -47,7 +47,7 @@ public class Hint {
      * this method also removes hyphens
      */
     public void generateId() {
-        id = UUID.fromString(UUID.randomUUID().toString()).toString();
+        id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     public String getId() {

@@ -51,7 +51,7 @@ public class Score implements Serializable {
      * this method also removes hyphens
      */
     public void generateId() {
-        id = UUID.fromString(UUID.randomUUID().toString()).toString();
+        id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     public String getId() {
