@@ -8,11 +8,13 @@ import provider.Secured;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
 
-@Path("/user")
+@Path("/users")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -37,6 +39,21 @@ public class UserRepresentation extends Representation {
     public Response getAll(){
         GenericEntity<List<User>> list = new GenericEntity<List<User>>(userResource.findAll()){};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Secured({UserRole.CUSTOMER})
+    @Path("/signedin")
+    public Response getClientInfo(@Context SecurityContext securityContext){
+        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
+        JsonObject json = Json.createObjectBuilder()
+                .add("user", Json.createArrayBuilder()
+                .add(Json.createObjectBuilder()
+                        .add("email", user.getEmail())
+                        .add("name", user.getName())))
+                .build();
+
+        return Response.ok(json, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
