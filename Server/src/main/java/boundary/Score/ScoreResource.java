@@ -39,7 +39,7 @@ public class ScoreResource {
      * @return List of Score
      */
     public List<Score> findByQuestion(Question question) {
-        return entityManager.createQuery("SELECT s FROM Score s WHERE s.question =: question")
+        return entityManager.createQuery("SELECT s FROM Score s WHERE s.question =: question ORDER BY s.value DESC")
         .setParameter("question", question)
         .getResultList();
     }
