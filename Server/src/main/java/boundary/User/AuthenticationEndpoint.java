@@ -28,7 +28,8 @@ import java.util.Date;
 
 @Path("/authentication")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)@Api(value = "/authentication", description = "To login")
+@Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/authentication", description = "To login")
 
 public class AuthenticationEndpoint {
 
