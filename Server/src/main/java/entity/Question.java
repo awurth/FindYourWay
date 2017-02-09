@@ -80,6 +80,14 @@ public class Question implements Serializable {
     }
 
     /**
+     * Method to check if a question is well constructed
+     * @return if the object is ok
+     */
+    public boolean isValid() {
+        return (isHintsValid() && isPointsValid());
+    }
+
+    /**
      * Method to check if hints are okay
      * @return if it's valid
      */
