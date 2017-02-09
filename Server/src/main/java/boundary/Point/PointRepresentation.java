@@ -66,7 +66,7 @@ public class PointRepresentation extends Representation {
             return Response.status(Response.Status.NOT_FOUND).build();
 
         if (!point.isValid())
-            flash(400, EMPTY_JSON);
+            flash(400, INVALID_JSON);
 
         originalPoint.update(point);
         pointResource.update(point);
