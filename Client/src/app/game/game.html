@@ -1,5 +1,21 @@
-<div class="container">
+<div class="game-container">
   <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{ googleMapsUrl }}">
-    <ng-map center="41,-87" zoom="3"></ng-map>
+    <ng-map center="48.866, 2.333" zoom="5" class="game-map">
+      <div ng-repeat="p in userPoints">
+        <marker ng-if="p.final" position="[{{ p.latitude }}, {{ p.longitude }}]" title="{{ p.name }}" icon="{{ flagIconUrl }}"></marker>
+        <marker ng-if="!p.final" position="[{{ p.latitude }}, {{ p.longitude }}]" title="{{ p.name }}" label="{{ labels[$index] }}"></marker>
+      </div>
+    </ng-map>
+  </div>
+  <div class="container-fluid text-center">
+    <h2>{{ questionPoint.name }}</h2>
+    <h3 ng-if="!questionPoint.final">{{ questionPoint.hint }}</h3>
+    <div ng-if="questionPoint.final">
+      <h3>Final point hints</h3>
+      <ul class="list-unstyled">
+        <li ng-repeat="hint in hints">{{ hint }}</li>
+      </ul>
+    </div>
+    <button ng-if="selecting" ng-click="validatePoint()" class="large success button">Validate location</button>
   </div>
 </div>
