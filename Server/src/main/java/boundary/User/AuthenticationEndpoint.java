@@ -2,6 +2,9 @@ package boundary.User;
 
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import control.KeyGenerator;
 
 import entity.User;
@@ -23,8 +26,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-
-
 @Path("/authentication")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)@Api(value = "/authentication", description = "To login")
@@ -41,6 +42,12 @@ public class AuthenticationEndpoint {
     private UriInfo uriInfo;
 
     @POST
+    @ApiOperation(value = "Login as a customer", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized : invalid credentials"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response authenticateUser(User user) {
         try {
             authenticate(user.getEmail(), user.getPassword());
