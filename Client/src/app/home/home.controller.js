@@ -1,10 +1,7 @@
 
-export default function HomeController ($scope, AuthService) {
+export default function HomeController ($scope) {
   $scope.play = () => {
   }
-  AuthService.loggedIn(function (user) {
-    console.log(user)
-  })
 }
 
 HomeController.$inject = ['$scope', 'AuthService']

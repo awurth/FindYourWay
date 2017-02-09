@@ -1,3 +1,4 @@
+
 import './assets/scss/app.scss'
 
 import angular from 'angular'
@@ -39,9 +40,14 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .directive('compareTo', CompareToDirective)
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)
-  .run(['$transitions', ($transitions) => {
-    $transitions.onStart({}, (trans) => {
-      let AuthService = trans.injector().get('AuthService')
-      AuthService.check()
+  .run(['$transitions', '$rootScope', '$state', ($transitions, $rootScope, $state) => {
+    $transitions.onSuccess({}, (trans) => {
+      let routeName = trans.$to().name
+      if (!(routeName === 'register') && !(routeName === 'login')) {
+        let AuthService = trans.injector().get('AuthService')
+        AuthService.check().then((response) => {
+          $rootScope.user = response.user[0]
+        })
+      }
     })
   }])

@@ -13,21 +13,7 @@ export default function config ($httpProvider, $stateProvider, $urlRouterProvide
         }
 
         return config
-      },
-      responseError: (response) => {
-        response.responseError = (response) => {
-          if (response.status === 401) {
-            JWTService.removeToken()
-          }
-        }
-        return response
       }
-    }
-  }])
-
-  $httpProvider.interceptors.push(['JWTService', (JWTService) => {
-    return {
-
     }
   }])
 
