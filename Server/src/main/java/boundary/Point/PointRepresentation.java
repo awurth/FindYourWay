@@ -1,7 +1,12 @@
 package boundary.Point;
 
 import boundary.Representation;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import entity.Point;
+import entity.UserRole;
+import provider.Secured;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -21,23 +26,46 @@ public class PointRepresentation extends Representation {
     private PointResource pointResource;
 
     @GET
+    //@Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Get all the points", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response getAll() {
         GenericEntity<List<Point>> list = new GenericEntity<List<Point>>(pointResource.findAll()){};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
     @GET
+    //@Secured({UserRole.ADMIN})
     @Path("/{id}")
+    @ApiOperation(value = "Get a point by its id", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response get(@PathParam("id") String id) {
         Point point = pointResource.findById(id);
 
         if (point == null)
-            return Response.noContent().build();
+            flash(404, "Error : Point does not exist");
 
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
     
     @POST
+    //@Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Add a point", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response add(@Context UriInfo uriInfo, Point point) {
          if (point == null)
              flash(400, EMPTY_JSON);
@@ -47,28 +75,46 @@ public class PointRepresentation extends Representation {
     }
     
     @PUT
-    public Response update(Point point) {
+    @Path("/{id}")
+    //@Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Update a point", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response update(@FormParam("id") String id, Point point) {
         if (point == null)
             flash(400, EMPTY_JSON);
         
-        point = pointResource.findById(point.getId());
+        Point original = pointResource.findById(id);
 
-        if (point == null)
+        if (original == null)
             return Response.noContent().build();
 
-        if (point.isValid())
-            flash(400, EMPTY_JSON);
+        if (!original.isValid())
+            flash(400, "Error : invalid object");
 
-        pointResource.update(point);
+        original.update(point);
+        pointResource.update(original);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @DELETE
-    public Response delete(Point point) {
-        if (point == null)
-            flash(400, EMPTY_JSON);
+    @Path("/{id}")
+    //@Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Delete a point", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response delete(@FormParam("id") String id) {
+        Point point = pointResource.findById(id);
 
-        if (pointResource.findById(point.getId()) == null)
+        if (point == null)
             flash(404, "Error : point does not exist");
 
         pointResource.delete(point);
