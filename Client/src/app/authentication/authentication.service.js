@@ -17,6 +17,12 @@ export default class AuthService {
     }).$promise
   }
 
+  loggedIn () {
+    return this.User.loggedIn(this.JWTService.getToken(), (user) => {
+      console.log(user)
+    }).$promise
+  }
+
   register (credentials) {
     return this.User.register(credentials).$promise
   }

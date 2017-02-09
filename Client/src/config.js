@@ -1,6 +1,6 @@
 import route from './routes'
 
-export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
+export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, $q) {
   $locationProvider.html5Mode(true)
 
   // Add Authorization header with JWT if user is authenticated
@@ -13,7 +13,21 @@ export default function config ($httpProvider, $stateProvider, $urlRouterProvide
         }
 
         return config
+      },
+      responseError: (response) => {
+        response.responseError = (response) => {
+          if (response.status === 401) {
+            JWTService.removeToken()
+          }
+        }
+        return response
       }
+    }
+  }])
+
+  $httpProvider.interceptors.push(['JWTService', (JWTService) => {
+    return {
+
     }
   }])
 

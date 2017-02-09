@@ -11,8 +11,7 @@
     </div>
     <div ng-if="authenticated">
       <ul class="nav navbar-nav navbar-right">
-        <li><a ui-sref="admin">Dashboard</a></li>
-        <li>Mon compte</li>
+        <li><a ui-sref="admin">{{user.name}}</a></li>
       </ul>
     </div>
   </div>
