@@ -66,6 +66,7 @@ public class ScoreRepresentation extends Representation {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Question not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
@@ -89,6 +90,7 @@ public class ScoreRepresentation extends Representation {
     }
     
     @DELETE
+    @Secured({UserRole.CUSTOMER})
     @Path("/{id}")
     @ApiOperation(value = "Delete a score by its id", notes = "Access : Owner only")
     @ApiResponses(value = {
