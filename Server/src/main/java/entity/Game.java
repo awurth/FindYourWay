@@ -19,8 +19,6 @@ public class Game implements Serializable {
     @ManyToOne
     private Question question;
 
-    @OneToOne
-    private User user;
 
     private long minimumDistance;
 
@@ -42,7 +40,7 @@ public class Game implements Serializable {
     }
     
     public boolean isValid() {
-        return (question != null && minimumDistance >= 0 && user != null);
+        return (question != null && minimumDistance >= 0);
     }
 
     public String getId() {
@@ -59,14 +57,6 @@ public class Game implements Serializable {
 
     public void setQuestion(Question question) {
         this.question = question;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public long getMinimumDistance() {
