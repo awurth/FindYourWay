@@ -29,7 +29,7 @@ export default function route ($stateProvider) {
       template: require('./app/admin/admin.html')
     })
     .state('admin.questions', {
-      url: '/points',
+      url: '/questions',
       template: require('./app/admin/questions.html'),
       controller: 'AdminQuestionsCtrl'
     })
