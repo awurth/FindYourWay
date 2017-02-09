@@ -95,7 +95,7 @@ public class UserRepresentation extends Representation {
             return Response.status(Response.Status.NOT_FOUND).build();
 
         if (userResource.findByEmail(user.getEmail()) != null)
-            flash(409, "This email address is already used");
+            return flash(409, "This email address is already used");
 
         try {
             userResource.insert(new User(user.getName(), user.getEmail(), PasswordManagement.digestPassword(user.getPassword())));

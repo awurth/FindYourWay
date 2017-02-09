@@ -71,11 +71,15 @@ public class GameRepresentation extends Representation {
         game.init();
 
         List<Question> questions = questionResource.findAll();
-        double rnd = Math.random() * (questions.size()-1);
+
+        if (questions.isEmpty())
+            return flash(500, "Error : the database does not have questions");
+
+        double rnd = Math.random() * (questions.size());
         int i = (int)(rnd - (rnd%1));
         game.setQuestion(questions.get(i));
-
-        return Response.ok(gameResource.insert(game), MediaType.APPLICATION_JSON).build();
+        game = gameResource.insert(game);
+        return Response.ok(game, MediaType.APPLICATION_JSON).build();
     }
     
 
@@ -93,7 +97,7 @@ public class GameRepresentation extends Representation {
         Game game = gameResource.findById(id);
 
         if (game == null)
-            flash(404, "Error : Game does not exist");
+            return flash(404, "Error : Game does not exist");
 
         gameResource.delete(game);
 
