@@ -17,7 +17,7 @@ import AdminQuestionsController from './app/admin/questions.controller'
 import AdminAddQuestionController from './app/admin/questions.add.controller'
 import AdminEditQuestionController from './app/admin/questions.edit.controller'
 import TopbarDirective from './app/topbar/topbar.directive'
-import CompareTo from './app/authentication/compareTo.directive'
+import CompareToDirective from './app/authentication/compareTo.directive'
 import HomeController from './app/home/home.controller'
 import GameController from './app/game/game.controller'
 
@@ -36,12 +36,12 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .controller('AdminEditQuestionCtrl', AdminEditQuestionController)
   .factory('Question', Question)
   .directive('topbar', TopbarDirective)
-  .directive('compareTo', CompareTo)
+  .directive('compareTo', CompareToDirective)
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)
-  .run(['$rootScope', '$transitions', ($rootScope, $transitions) => {
-    $transitions.onStart({}, ($trans) => {
-      var auth = $trans.injector().get('AuthService')
-      $rootScope.loggedIn = auth.check()
+  .run(['$transitions', ($transitions) => {
+    $transitions.onStart({}, (trans) => {
+      let AuthService = trans.injector().get('AuthService')
+      AuthService.check()
     })
   }])
