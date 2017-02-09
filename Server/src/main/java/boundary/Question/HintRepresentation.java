@@ -16,7 +16,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(value = "/hints", description = "Hints management")
-public class HintRepresentation extends Representation{
+public class HintRepresentation extends Representation {
     @EJB
     private QuestionResource questionResource;
 
