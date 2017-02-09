@@ -12,23 +12,29 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Game.findById", query = "SELECT g FROM Game g WHERE g.id = :id")
 })
 public class Game implements Serializable {
-    
+
+    public final static int LIMIT_DISTANCE = 10;
+
     @Id
     private String id;
 
     @ManyToOne
     private Question question;
 
-
-    private long minimumDistance;
+    private int distance;
 
     /**
      * Empty Constructor
      */
     public Game() { }
-    
+
+    /**
+     * Method to init a game, it is a kind of session for a user
+     * distance is set at LIMIT_DISTANCE (km), it is a condition for the gameplay :
+     * at what distance maximum you have to place your marker on the map to get points
+     */
     public void init() {
-        this.minimumDistance = 10L;
+        distance = LIMIT_DISTANCE;
     }
     
     /**
@@ -40,7 +46,7 @@ public class Game implements Serializable {
     }
     
     public boolean isValid() {
-        return (question != null && minimumDistance >= 0);
+        return (question != null && distance >= 0);
     }
 
     public String getId() {
@@ -59,11 +65,11 @@ public class Game implements Serializable {
         this.question = question;
     }
 
-    public long getMinimumDistance() {
-        return minimumDistance;
+    public long getDistance() {
+        return distance;
     }
 
-    public void setMinimumDistance(long minimumDistance) {
-        this.minimumDistance = minimumDistance;
+    public void setDistance(long minimumDistance) {
+        this.distance = minimumDistance;
     }
 }
