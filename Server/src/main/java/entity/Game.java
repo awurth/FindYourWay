@@ -18,6 +18,8 @@ public class Game implements Serializable {
     @Id
     private String id;
 
+    private String token;
+
     @ManyToOne
     private Question question;
 
@@ -35,6 +37,14 @@ public class Game implements Serializable {
      */
     public void init() {
         distance = LIMIT_DISTANCE;
+    }
+
+    /**
+     * Helper method to generate a token and set it
+     * this method also removes hyphens
+     */
+    public void generateToken() {
+        token = UUID.randomUUID().toString().replaceAll("-", "");;
     }
     
     /**
@@ -71,5 +81,9 @@ public class Game implements Serializable {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

@@ -42,18 +42,27 @@ public class GameRepresentation extends Representation {
     @EJB
     private QuestionResource questionResource;
 
-    @GET
+    @POST
     @Path("/{id}")
-    @ApiOperation(value = "Get a game by its id", notes = "Access : Everyone")
+    @ApiOperation(value = "Retrieve a game by its id and its token", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Game Not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response get(@PathParam("id") String id) {
+    public Response get(@PathParam("id") String id, String token) {
+        if (token == null)
+            return flash(400, EMPTY_JSON);
+
        Game game = gameResource.findById(id);
+
        if (game == null)
-            flash(404, "Error : Game does not exist");
+            return flash(404, "Error : Game does not exist");
+
+       if (!token.equals(game.getToken()))
+           return Response.status(Response.Status.UNAUTHORIZED).build();
 
        return Response.ok(game, MediaType.APPLICATION_JSON).build();
     }
