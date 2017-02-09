@@ -73,8 +73,9 @@ public class UserRepresentation extends Representation {
         JsonObject json = Json.createObjectBuilder()
                 .add("user", Json.createArrayBuilder()
                         .add(Json.createObjectBuilder()
-                                .add("email", user.getEmail())
-                                .add("name", user.getName())))
+                                .add("email", user.getEmail() )
+                                .add("name", user.getName() )
+                                .add("role", user.getRole().toString())))
                 .build();
 
         return Response.ok(json, MediaType.APPLICATION_JSON).build();
