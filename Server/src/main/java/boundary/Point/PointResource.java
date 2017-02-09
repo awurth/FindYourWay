@@ -22,6 +22,7 @@ public class PointResource {
 
     /**
      * Method to find a Point by its id
+     *
      * @param id : primary key
      * @return Point
      */
@@ -32,6 +33,7 @@ public class PointResource {
     /**
      * Method to insert a point into the database
      * the id is also generated in this part
+     *
      * @param point Point to add
      * @return the Point added
      */
@@ -39,9 +41,10 @@ public class PointResource {
         point.generateId();
         return entityManager.merge(point);
     }
-    
+
     /**
      * Method to update a point
+     *
      * @param point
      * @return the updated point
      */
@@ -51,6 +54,7 @@ public class PointResource {
 
     /**
      * Method to delete a point
+     *
      * @param point
      */
     public void delete(Point point) {

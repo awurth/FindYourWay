@@ -81,17 +81,6 @@ public class Point implements Serializable {
     }
 
     /**
-     * Method to update a point from another one
-     * @param point
-     */
-    public void update(Point point) {
-        this.longitude = point.getLongitude();
-        this.latitude = point.getLatitude();
-        this.name = point.getName();
-        isFinal = point.isFinal();
-    }
-
-    /**
      * Helper method to know if critical fields have been filled
      * @return if the point is valid
      */
