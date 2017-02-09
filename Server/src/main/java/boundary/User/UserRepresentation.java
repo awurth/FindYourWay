@@ -2,6 +2,9 @@ package boundary.User;
 
 import boundary.Representation;
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import control.PasswordManagement;
 import entity.User;
 import entity.UserRole;
@@ -28,6 +31,13 @@ public class UserRepresentation extends Representation {
     @GET
     @Secured({UserRole.ADMIN})
     @Path("/{email}")
+    @ApiOperation(value = "Get a user by its email address", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response get(@PathParam("email") String email) {
         User user = userResource.findByEmail(email);
         if (user != null)
@@ -38,6 +48,12 @@ public class UserRepresentation extends Representation {
 
     @GET
     @Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Get all the users", notes = "Access: Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response getAll(){
         GenericEntity<List<User>> list = new GenericEntity<List<User>>(userResource.findAll()){};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
@@ -45,6 +61,12 @@ public class UserRepresentation extends Representation {
 
     @GET
     @Secured({UserRole.CUSTOMER})
+    @ApiOperation(value = "Get a user by a JWT", notes = "Access : Logged user only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @Path("/signedin")
     public Response getClientInfo(@Context SecurityContext securityContext){
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
@@ -60,6 +82,13 @@ public class UserRepresentation extends Representation {
 
     @POST
     @Path("/signup")
+    @ApiOperation(value = "Create a customer account", notes = "Email address is unique")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 409, message = "Conflict : email address is already used"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response signup(User user) {
         if ((user.getName() == null || user.getEmail() == null || user.getPassword() == null))
             return Response.status(Response.Status.NOT_FOUND).build();
