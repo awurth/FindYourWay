@@ -90,7 +90,7 @@ public class ScoreRepresentation extends Representation {
     
     @DELETE
     @Path("/{id}")
-    @ApiOperation(value = "Delete a score by its id", notes = "Access : Customer only")
+    @ApiOperation(value = "Delete a score by its id", notes = "Access : Owner only")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No content"),
             @ApiResponse(code = 400, message = "Bad Request"),
