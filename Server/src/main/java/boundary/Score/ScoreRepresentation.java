@@ -60,7 +60,6 @@ public class ScoreRepresentation extends Representation {
         return Response.ok(score, MediaType.APPLICATION_JSON).build();
     }
 
-    
     @POST
     @Secured({UserRole.CUSTOMER})
     @ApiOperation(value = "Add a new score", notes = "Access : Customer only")
@@ -96,6 +95,7 @@ public class ScoreRepresentation extends Representation {
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No content"),
             @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Question not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
@@ -116,22 +116,26 @@ public class ScoreRepresentation extends Representation {
     
     @PUT
     @Path("/{id}")
-    @Secured({UserRole.CUSTOMER})
-    public Response update(@PathParam("id") String id, @Context SecurityContext securityContext, Score score) {
-        if(score == null)
+    //@Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Update a score by its id", notes = "Access : Admin only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Question not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response update(@PathParam("id") String id, Score score) {
+        if (score == null)
             flash(400, EMPTY_JSON);
 
-        if(!score.isValid())
+        if (!score.isValid())
             flash(400, INVALID_JSON);
 
-        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
-        Score originalScore = scoreResource.findById(id);
+       Score originalScore = scoreResource.findById(id);
 
         if (originalScore == null)
             return Response.status(Response.Status.NOT_FOUND).build();
-
-        if (!originalScore.getUser().equals(user))
-            return Response.status(Response.Status.UNAUTHORIZED).build();
 
         if (questionResource.findById(score.getQuestion().getId()) == null)
             flash(404, "Error : Question does not exist");
