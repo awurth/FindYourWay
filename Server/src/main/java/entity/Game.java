@@ -65,11 +65,11 @@ public class Game implements Serializable {
         this.question = question;
     }
 
-    public long getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(long minimumDistance) {
-        this.distance = minimumDistance;
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 }
