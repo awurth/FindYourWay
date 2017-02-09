@@ -8,10 +8,8 @@ export default class AuthService {
   }
 
   check () {
-    return this.User.loggedIn((user) => {
-      this.$rootScope.user = user
-    }, (response) => {
-      this.$state.go('login')
+    return this.User.loggedIn((response) => {
+      this.$rootScope.user = response.user
     }).$promise
   }
 

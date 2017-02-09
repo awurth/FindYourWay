@@ -44,14 +44,9 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)
   .service('GeoService', GeoService)
-  .run(['$transitions', '$rootScope', '$state', ($transitions, $rootScope, $state) => {
+  .run(['$transitions', ($transitions) => {
     $transitions.onSuccess({}, (trans) => {
-      let routeName = trans.$to().name
-      if (!(routeName === 'register') && !(routeName === 'login')) {
-        let AuthService = trans.injector().get('AuthService')
-        AuthService.check().then((response) => {
-          $rootScope.user = response.user[0]
-        })
-      }
+      let AuthService = trans.injector().get('AuthService')
+      AuthService.check()
     })
   }])
