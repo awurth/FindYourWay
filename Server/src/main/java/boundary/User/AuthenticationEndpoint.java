@@ -1,6 +1,5 @@
 package boundary.User;
 
-import com.sun.xml.internal.txw2.annotation.XmlElement;
 import control.KeyGenerator;
 
 import entity.User;
