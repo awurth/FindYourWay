@@ -4,6 +4,9 @@ import boundary.Question.QuestionResource;
 import boundary.Representation;
 import boundary.User.UserResource;
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import entity.Score;
 import entity.User;
 import entity.UserRole;
@@ -32,10 +35,25 @@ public class ScoreRepresentation extends Representation {
     private QuestionResource questionResource;
     
     @GET
-    public Response get() {
+    @ApiOperation(value = "Get all the scores", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response getAll() {
         GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scoreResource.findAll()){};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
+
+    @GET
+    @Path("/{id}")
+    public Response get(@PathParam("id") String id) {
+        Score score = scoreResource.findById(id);
+        if (score == null)
+            flash(404, "Error : Score does not exist");
+        return Response.ok(score, MediaType.APPLICATION_JSON).build();
+    }
+
     
     @POST
     @Secured({UserRole.CUSTOMER})
