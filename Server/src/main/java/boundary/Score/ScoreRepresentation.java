@@ -56,7 +56,7 @@ public class ScoreRepresentation extends Representation {
     public Response get(@PathParam("id") String id) {
         Score score = scoreResource.findById(id);
         if (score == null)
-            flash(404, "Error : Score does not exist");
+            return flash(404, "Error : Score does not exist");
         return Response.ok(score, MediaType.APPLICATION_JSON).build();
     }
 
@@ -72,17 +72,17 @@ public class ScoreRepresentation extends Representation {
     })
     public Response add(@Context SecurityContext securityContext, Score score) {
         if(score == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
 
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
         score.setUser(user);
 
         if (!score.isValid())
-            flash(400, MISSING_FIELDS + ", also be sure the score is greater than 0");
+            return flash(400, MISSING_FIELDS + ", also be sure the score is greater than 0");
 
         if (questionResource.findById(score.getQuestion().getId()) == null)
-            flash(404, "Error : Question does not exist");
+            return flash(404, "Error : Question does not exist");
 
         score = scoreResource.insert(score);
         
@@ -128,7 +128,7 @@ public class ScoreRepresentation extends Representation {
     })
     public Response update(@PathParam("id") String id, Score score) {
         if (score == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
         
         score = scoreResource.findById(score.getId());
 
@@ -136,7 +136,7 @@ public class ScoreRepresentation extends Representation {
             return Response.noContent().build();
 
         if (!score.isValid())
-            flash(400, INVALID_JSON);
+            return flash(400, INVALID_JSON);
 
        Score originalScore = scoreResource.findById(id);
 
@@ -144,7 +144,7 @@ public class ScoreRepresentation extends Representation {
             return Response.status(Response.Status.NOT_FOUND).build();
 
         if (questionResource.findById(score.getQuestion().getId()) == null)
-            flash(404, "Error : Question does not exist");
+            return flash(404, "Error : Question does not exist");
         
         return Response.status(Response.Status.NO_CONTENT).build();
     }

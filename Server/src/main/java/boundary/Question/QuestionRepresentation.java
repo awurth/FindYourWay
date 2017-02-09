@@ -67,7 +67,7 @@ public class QuestionRepresentation extends Representation {
         Question question = questionResource.findById(id);
 
         if (question == null)
-            flash(404, "Error : question does not exist");
+            return flash(404, "Error : question does not exist");
 
         question.getLinks().clear();
         question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
@@ -94,10 +94,10 @@ public class QuestionRepresentation extends Representation {
     })
     public Response add(@Context UriInfo uriInfo, Question question) {
         if (question == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
 
         if (!question.isPointsValid())
-            flash(400, INVALID_JSON);
+            return flash(400, INVALID_JSON);
 
         question.getLinks().clear();
         question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
@@ -127,7 +127,7 @@ public class QuestionRepresentation extends Representation {
         Question question = questionResource.findById(id);
 
         if (question == null)
-            flash(404, "Error : question does not exist");
+            return flash(404, "Error : question does not exist");
 
         questionResource.delete(question);
         
@@ -149,13 +149,13 @@ public class QuestionRepresentation extends Representation {
         Question originalQuestion = questionResource.findById(id);
 
         if (originalQuestion == null)
-            flash(404, "Error : question does not exist");
+            return flash(404, "Error : question does not exist");
 
         if (question == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
 
         if (!question.isValid())
-            flash(400, INVALID_JSON);
+            return flash(400, INVALID_JSON);
 
         questionResource.update(originalQuestion, question);
 

@@ -51,7 +51,7 @@ public class PointRepresentation extends Representation {
         Point point = pointResource.findById(id);
 
         if (point == null)
-            flash(404, "Error : point does not exist");
+            return flash(404, "Error : point does not exist");
 
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
@@ -66,7 +66,7 @@ public class PointRepresentation extends Representation {
     })
     public Response add(@Context UriInfo uriInfo, Point point) {
         if (point == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
 
         point = pointResource.insert(point);
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
@@ -84,14 +84,14 @@ public class PointRepresentation extends Representation {
     })
     public Response update(@PathParam("id") String id, Point point) {
         if (point == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
 
         Point originalPoint = pointResource.findById(id);
         if (originalPoint == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
         if (!point.isValid())
-            flash(400, INVALID_JSON);
+            return flash(400, INVALID_JSON);
 
         originalPoint.update(point);
         pointResource.update(point);
@@ -112,7 +112,7 @@ public class PointRepresentation extends Representation {
         Point point = pointResource.findById(id);
       
         if (point == null)
-            flash(404, "Error : point does not exist");
+            return flash(404, "Error : point does not exist");
 
         pointResource.delete(point);
 

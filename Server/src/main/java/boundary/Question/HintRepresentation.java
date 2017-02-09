@@ -56,7 +56,7 @@ public class HintRepresentation extends Representation {
     public Response getByQuestion(@PathParam("id") String id) {
         Question question = questionResource.findById(id);
         if (question == null)
-            flash(404, "Error : Question does not exist");
+            return flash(404, "Error : Question does not exist");
 
         List<Hint> hints = hintResource.findByQuestion(question);
 
@@ -77,13 +77,13 @@ public class HintRepresentation extends Representation {
     })
     public Response add(Hint hint) {
         if (hint == null)
-            flash(400, EMPTY_JSON);
+            return flash(400, EMPTY_JSON);
 
         if (!hint.isValid())
-            flash(400, INVALID_JSON);
+            return flash(400, INVALID_JSON);
 
         if (questionResource.findById(hint.getQuestion().getId()) == null)
-            flash(404, "Error : question does not exist");
+            return flash(404, "Error : question does not exist");
 
         return Response.ok(hint, MediaType.APPLICATION_JSON).build();
     }
