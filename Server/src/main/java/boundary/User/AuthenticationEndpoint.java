@@ -1,14 +1,20 @@
 package boundary.User;
 
+import com.sun.xml.internal.txw2.annotation.XmlElement;
 import control.KeyGenerator;
 
 import entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.mindrot.jbcrypt.BCrypt;
+import scala.util.parsing.json.JSONObject;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.persistence.Entity;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -37,12 +43,10 @@ public class AuthenticationEndpoint {
     private UriInfo uriInfo;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     public Response authenticateUser(User user) {
-        System.out.println(user);
         try {
             authenticate(user.getEmail(), user.getPassword());
-            Token token = new Token(issueToken(user.getEmail()));
+            JsonObject token = Json.createObjectBuilder().add("token", issueToken(user.getEmail())).build();
             return Response.ok(token , MediaType.APPLICATION_JSON).build();
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).type("text/plain").entity("Invalid credentials").build();

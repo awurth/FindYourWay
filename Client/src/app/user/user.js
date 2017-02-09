@@ -1,6 +1,6 @@
 
 export default function User ($resource, API) {
-  return $resource(API.url + '/users/:id', { id: '@_id' }, {
+  return $resource(API.url + '/users/:id', { id: '@id' }, {
     update: { method: 'PUT' },
     login: {
       method: 'POST',

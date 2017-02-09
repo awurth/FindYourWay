@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,9 +12,9 @@ import java.util.UUID;
 @Entity
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Path.findAll", query = "SELECT p FROM Question p"),
-        @NamedQuery(name = "Path.findById", query = "SELECT p FROM Question p WHERE p.id = :id"),
-        @NamedQuery(name = "Path.countAll", query = "SELECT COUNT(p) FROM Question p")
+        @NamedQuery(name = "Question.findAll", query = "SELECT q FROM Question q"),
+        @NamedQuery(name = "Question.findById", query = "SELECT q FROM Question q WHERE q.id = :id"),
+        @NamedQuery(name = "Question.countAll", query = "SELECT COUNT(q) FROM Question q")
 })
 public class Question implements Serializable {
 
@@ -26,6 +27,10 @@ public class Question implements Serializable {
     @OneToMany
     private List<Point> points = new ArrayList<>(PATH_LENGTH);
 
+    @Transient
+    @XmlElement(name="_links")
+    private List<Link> links = new ArrayList<>();
+
     /**
      * Empty Constructor
      */
@@ -36,11 +41,46 @@ public class Question implements Serializable {
     }
 
     /**
+     * Method to find the final point in a question
+     * @return final point
+     */
+    public Point findFinal() {
+        for (Point point : points) {
+            if (point.isFinal())
+                    return point;
+        }
+        return null;
+    }
+
+    /**
+     * Method to check if points are okay : check if
+     *  - the length is okay
+     *  - the points are valid
+     *  - there is a final point and if the question does not have many
+     * @return if it's valid
+     */
+    public boolean isPointsValid() {
+        int counter = 0;
+
+        if (points.size() != PATH_LENGTH)
+            return false;
+
+        for (Point point : points) {
+            if (!point.isValid())
+                return false;
+            if (point.isFinal())
+                counter++;
+        }
+
+        return (counter == 1);
+    }
+
+    /**
      * Helper method to generate an id and set it to this.id
      * this method also removes hyphens
      */
     public void generateId() {
-        id = UUID.fromString(UUID.randomUUID().toString()).toString();
+        id = UUID.randomUUID().toString().replaceAll("-", "");;
     }
 
     /**
@@ -54,6 +94,15 @@ public class Question implements Serializable {
 
         points.add(point);
         return true;
+    }
+
+    /**
+     * Method to add a link
+     * @param uri uri link
+     * @param rel name
+     */
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(rel, uri));
     }
 
     public String getId() {
@@ -70,6 +119,10 @@ public class Question implements Serializable {
 
     public void setPoints(List<Point> points) {
         this.points = points;
+    }
+
+    public List<Link> getLinks() {
+        return links;
     }
 
 }

@@ -2,7 +2,11 @@ package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +20,11 @@ public class Point implements Serializable {
     private double latitude;
     private String name;
     private String hint;
-    private boolean isFinal = false;
+    private boolean isFinal;
+
+    @Transient
+    @XmlElement(name="_links")
+    private List<Link> links = new ArrayList<>();
 
     /**
      * Empty constructor
@@ -28,12 +36,28 @@ public class Point implements Serializable {
      * @param longitude x
      * @param latitude y
      * @param hint (image url)
+     * @param aFinal : answer if the point is the final one
+     */
+    public Point(String name, double longitude, double latitude, String hint, boolean aFinal) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.hint = hint;
+        this.name = name;
+        isFinal = aFinal;
+    }
+
+    /**
+     * Constructor for a Point without isFinal attribute
+     * @param longitude x
+     * @param latitude y
+     * @param hint (image url)
      */
     public Point(String name, double longitude, double latitude, String hint) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.hint = hint;
         this.name = name;
+        isFinal = false;
     }
 
     /**
@@ -45,6 +69,7 @@ public class Point implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.name = name;
+        isFinal = false;
     }
 
     /**
@@ -52,7 +77,24 @@ public class Point implements Serializable {
      * this method also removes hyphens
      */
     public void generateId() {
-        id = UUID.fromString(UUID.randomUUID().toString()).toString();
+        id = UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    /**
+     * Helper method to know if critical fields have been filled
+     * @return if the point is valid
+     */
+    public boolean isValid() {
+        return (name != null && hint != null && (Double.toString(longitude) != null) && (Double.toString(latitude) != null));
+    }
+
+    /**
+     * Method to add a link
+     * @param uri uri link
+     * @param rel name
+     */
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(rel, uri));
     }
 
     public double getLongitude() {
@@ -101,5 +143,9 @@ public class Point implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Link> getLinks() {
+        return links;
     }
 }

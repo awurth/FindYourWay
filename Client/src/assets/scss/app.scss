@@ -4,6 +4,7 @@
 body {
   padding-top: 70px;
 }
+
 .ng-invalid {
     border-color: red;
     outline-color: red;
@@ -19,4 +20,61 @@ body {
   padding-top: 5px;
   padding-bottom: 10px;
   color: red;
+}
+
+.right.aligned {
+  @extend .text-right;
+}
+
+.field {
+  @extend .form-group;
+}
+
+.input {
+  @extend .form-control;
+}
+
+.button {
+  @extend .btn;
+  &.primary {
+    @extend .btn-primary;
+  }
+  &.success {
+    @extend .btn-success;
+  }
+  &.info {
+    @extend .btn-info;
+  }
+  &.warning {
+    @extend .btn-warning;
+  }
+  &.danger {
+    @extend .btn-danger;
+  }
+
+  &.mini {
+    @extend .btn-xs;
+  }
+  &.small {
+    @extend .btn-sm;
+  }
+  &.large {
+    @extend .btn-lg;
+  }
+}
+
+.message {
+  @extend .alert;
+  &.success {
+    @extend .alert-success;
+  }
+  &.info {
+    @extend .alert-info;
+  }
+  &.warning {
+    @extend .alert-warning;
+  }
+  &.danger {
+    @extend .alert-danger;
+  }
 }
