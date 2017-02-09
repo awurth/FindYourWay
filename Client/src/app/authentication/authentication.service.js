@@ -1,14 +1,20 @@
 
 export default class AuthService {
-  constructor ($rootScope, JWTService, User) {
+  constructor ($rootScope, JWTService, User, $state) {
     this.$rootScope = $rootScope
     this.JWTService = JWTService
     this.User = User
+    this.$state = $state
   }
 
   check () {
     this.$rootScope.authenticated = this.JWTService.getToken() != null
-    return this.$rootScope.authenticated
+    return this.User.loggedIn((user) => {
+      this.$rootScope.user = user
+      this.$rootScope.authenticated = true
+    }, (response) => {
+      this.$state.go('login')
+    }).$promise
   }
 
   login (credentials) {
@@ -27,4 +33,4 @@ export default class AuthService {
   }
 }
 
-AuthService.$inject = ['$rootScope', 'JWTService', 'User']
+AuthService.$inject = ['$rootScope', 'JWTService', 'User', '$state']

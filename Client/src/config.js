@@ -1,6 +1,6 @@
 import route from './routes'
 
-export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
+export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, $q) {
   $locationProvider.html5Mode(true)
 
   // Add Authorization header with JWT if user is authenticated
