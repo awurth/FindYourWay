@@ -27,12 +27,10 @@ public class Game implements Serializable {
     /**
      * Empty Constructor
      */
-    public Game() {}
+    public Game() { }
     
-    public Game(long minimumDistance, Question question, User user) {
-        this.minimumDistance = minimumDistance;
-        this.question = question;
-        this.user = user;
+    public void init() {
+        this.minimumDistance = 10L;
     }
     
     /**

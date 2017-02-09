@@ -8,8 +8,10 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import entity.Game;
+import entity.Question;
 import entity.User;
 import entity.UserRole;
+import java.util.List;
 import provider.Secured;
 
 import javax.ejb.EJB;
@@ -64,23 +66,32 @@ public class GameRepresentation extends Representation {
     
     @POST
     @Secured({UserRole.CUSTOMER})
-    @ApiOperation(value = "Get a game by its id", notes = "Access : Owner only")
+    @ApiOperation(value = "Create a game from nothing", notes = "Access : Owner only")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response add(@Context SecurityContext securityContext, Game game) {
+    public Response add(@Context SecurityContext securityContext) {
+        Game game = new Game();
+        game.init();
+        
+        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
+
+        game.setUser(user);
+        
+        //on charge une question au hasard
+        List<Question> questions = questionResource.findAll();
+        double rnd = Math.random() * (questions.size()-1);
+        int indice = (int)(rnd - (rnd%1));
+        game.setQuestion(questions.get(indice));
+        
         if (game == null)
             flash(400, EMPTY_JSON);
         
         if (!game.isValid())
             flash(400, INVALID_JSON);
-
-        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
-
-        game.setUser(user);
 
         if (questionResource.findById(game.getQuestion().getId()) == null)
             flash(400, "Error : the question does not exist");
