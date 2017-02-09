@@ -50,7 +50,7 @@ public class GameRepresentation extends Representation {
             @ApiResponse(code = 404, message = "Game Not Found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response get(@Context SecurityContext securityContext, @PathParam("id") String id) {
+    public Response get(@PathParam("id") String id) {
        Game game = gameResource.findById(id);
        if (game == null)
             flash(404, "Error : Game does not exist");
@@ -66,7 +66,7 @@ public class GameRepresentation extends Representation {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response add(@Context SecurityContext securityContext) {
+    public Response add() {
         Game game = new Game();
         game.init();
 
@@ -89,7 +89,7 @@ public class GameRepresentation extends Representation {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response delete(@Context SecurityContext securityContext, @PathParam("id") String id) {
+    public Response delete(@PathParam("id") String id) {
         Game game = gameResource.findById(id);
 
         if (game == null)
