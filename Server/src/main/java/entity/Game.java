@@ -37,6 +37,7 @@ public class Game implements Serializable {
      */
     public void init() {
         distance = LIMIT_DISTANCE;
+        generateToken();
     }
 
     /**
