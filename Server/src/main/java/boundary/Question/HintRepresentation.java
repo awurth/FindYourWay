@@ -28,7 +28,7 @@ public class HintRepresentation extends Representation {
     public Response get(@PathParam("id") String id) {
         Hint hint = hintResource.findById(id);
         if (hint == null)
-            return Response.noContent().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok(hint, MediaType.APPLICATION_JSON).build();
     }
 

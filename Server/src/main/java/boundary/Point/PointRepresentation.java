@@ -95,7 +95,7 @@ public class PointRepresentation extends Representation {
         Point original = pointResource.findById(id);
 
         if (original == null)
-            return Response.noContent().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
 
         if (!original.isValid())
             flash(400, "Error : invalid object");
