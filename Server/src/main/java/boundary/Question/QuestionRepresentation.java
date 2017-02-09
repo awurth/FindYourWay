@@ -25,17 +25,18 @@ public class QuestionRepresentation extends Representation {
 
     @GET
     public Response get(@Context UriInfo uriInfo) {
-      List<Question> questions = questionResource.findAll();
-       questions.parallelStream().forEach(question -> {
-           question.getLinks().clear();
-           question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
-           question.getPoints().forEach(point -> {
-               point.getLinks().clear();
-               point.addLink(getUriForSelfPoint(uriInfo, point), "point");
-           });
-       });
+        List<Question> questions = questionResource.findAll();
+        questions.parallelStream().forEach(question -> {
+            question.getLinks().clear();
+            question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
+            question.getPoints().forEach(point -> {
+                point.getLinks().clear();
+                point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+            });
+        });
 
-        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions){};
+        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions) {
+        };
 
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
