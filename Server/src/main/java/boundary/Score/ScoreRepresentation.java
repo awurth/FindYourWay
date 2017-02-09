@@ -47,6 +47,12 @@ public class ScoreRepresentation extends Representation {
 
     @GET
     @Path("/{id}")
+    @ApiOperation(value = "Get a score by its id", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response get(@PathParam("id") String id) {
         Score score = scoreResource.findById(id);
         if (score == null)
@@ -57,6 +63,13 @@ public class ScoreRepresentation extends Representation {
     
     @POST
     @Secured({UserRole.CUSTOMER})
+    @ApiOperation(value = "Add a new score", notes = "Access : Customer only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Question not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response add(@Context SecurityContext securityContext, Score score) {
         if(score == null)
             flash(400, EMPTY_JSON);
@@ -79,11 +92,18 @@ public class ScoreRepresentation extends Representation {
     @DELETE
     @Path("/{id}")
     @Secured({UserRole.CUSTOMER})
+    @ApiOperation(value = "Delete a score by its id", notes = "Access : Customer only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Question not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response delete(@PathParam("id") String id, @Context SecurityContext securityContext) {
         Score score = scoreResource.findById(id);
 
         if(score == null)
-            return Response.noContent().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
 
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
@@ -91,7 +111,7 @@ public class ScoreRepresentation extends Representation {
             return Response.status(Response.Status.UNAUTHORIZED).build();
 
         scoreResource.delete(score);
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.noContent().build();
     }
     
     @PUT
@@ -108,7 +128,7 @@ public class ScoreRepresentation extends Representation {
         Score originalScore = scoreResource.findById(id);
 
         if (originalScore == null)
-            return Response.noContent().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
 
         if (!originalScore.getUser().equals(user))
             return Response.status(Response.Status.UNAUTHORIZED).build();
