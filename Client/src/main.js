@@ -15,6 +15,7 @@ import LoginController from './app/authentication/login.controller'
 import RegisterController from './app/authentication/register.controller'
 import AdminQuestionsController from './app/admin/questions.controller'
 import AdminAddQuestionController from './app/admin/questions.add.controller'
+import AdminEditQuestionController from './app/admin/questions.edit.controller'
 import TopbarDirective from './app/topbar/topbar.directive'
 import CompareTo from './app/authentication/compareTo.directive'
 import HomeController from './app/home/home.controller'
@@ -32,6 +33,7 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .controller('RegisterCtrl', RegisterController)
   .controller('AdminQuestionsCtrl', AdminQuestionsController)
   .controller('AdminAddQuestionCtrl', AdminAddQuestionController)
+  .controller('AdminEditQuestionCtrl', AdminEditQuestionController)
   .factory('Question', Question)
   .directive('topbar', TopbarDirective)
   .directive('compareTo', CompareTo)

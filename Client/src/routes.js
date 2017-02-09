@@ -20,12 +20,11 @@ export default function route ($stateProvider) {
     /* ---------- ADMIN ---------- */
     /*******************************/
     .state('admin', {
-      abstract: true,
       url: '/admin',
       template: require('./app/admin/admin.html')
     })
     .state('admin.questions', {
-      url: '/points',
+      url: '/questions',
       template: require('./app/admin/questions.html'),
       controller: 'AdminQuestionsCtrl'
     })
@@ -34,11 +33,11 @@ export default function route ($stateProvider) {
       template: require('./app/admin/questions.add.html'),
       controller: 'AdminAddQuestionCtrl'
     })
-    /* .state('admin.questions.edit', {
+    .state('admin.questions.edit', {
       url: '/{id}/edit',
-      template: require('./app/admin/question-form.html'),
+      template: require('./app/admin/questions.edit.html'),
       controller: 'AdminEditQuestionCtrl'
-    }) */
+    })
     .state('game', {
       url: '/game',
       template: require('./app/game/game.html'),

@@ -2,20 +2,20 @@ package boundary.Question;
 
 import boundary.Point.PointRepresentation;
 import boundary.Point.PointResource;
+import boundary.Representation;
 import entity.Point;
 import entity.Question;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
 
-@Path("/question")
+@Path("/questions")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class QuestionRepresentation {
+public class QuestionRepresentation extends Representation {
 
     @EJB
     private QuestionResource questionResource;
@@ -40,20 +40,35 @@ public class QuestionRepresentation {
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
+    @GET
+    @Path("/{id}")
+    public Response get(@Context UriInfo uriInfo, @PathParam("id") String id) {
+        Question question = questionResource.findById(id);
+
+        if (question == null)
+            return Response.noContent().build();
+
+        question.getLinks().clear();
+        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
+
+        List<Point> points = question.getPoints();
+        points.parallelStream().forEach(point -> {
+             point.getLinks().clear();
+             point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+        });
+
+        question.setPoints(points);
+
+        return Response.ok(question, MediaType.APPLICATION_JSON).build();
+    }
+
     @POST
     public Response add(@Context UriInfo uriInfo, Question question) {
         if (question == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Error : you sent an empty object")
-                    .build();
+            flash(400, EMPTY_JSON);
 
         if (!question.isPointsValid())
-                return Response.status(400)
-                        .type(MediaType.TEXT_PLAIN_TYPE)
-                        .entity("Error : make sure you correctly created your points, only one point can be final and check you didn't add more than " + Question.PATH_LENGTH + " points.")
-                        .build();
-
+            flash(400, INVALID_JSON);
 
         question.getLinks().clear();
         question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
@@ -70,19 +85,34 @@ public class QuestionRepresentation {
     }
     
     @DELETE
-    public Response delete(Question question) {
-        
+    @Path("/{id}")
+    public Response delete(@PathParam("id") String id) {
+        Question question = questionResource.findById(id);
+
         if (question == null)
-            return Response.status(400)
-                    .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity("Error : you sent an empty object")
-                    .build();
-        
-        if (questionResource.findById(question.getId()) == null)
             return Response.noContent().build();
         
         questionResource.delete(question);
         
+        return Response.status(204).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response edit(@PathParam("id") String id, Question question) {
+        Question originalQuestion = questionResource.findById(id);
+
+        if (originalQuestion == null)
+            return Response.noContent().build();
+
+        if (question == null)
+            flash(400, EMPTY_JSON);
+
+        if (!question.isValid())
+            flash(400, INVALID_JSON);
+
+        questionResource.update(originalQuestion, question);
+
         return Response.status(204).build();
     }
 
