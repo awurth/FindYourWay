@@ -1,20 +1,16 @@
 package boundary.User;
 
-import com.sun.xml.internal.txw2.annotation.XmlElement;
 import control.KeyGenerator;
 
 import entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.mindrot.jbcrypt.BCrypt;
-import scala.util.parsing.json.JSONObject;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.persistence.Entity;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
 
 @Path("/authentication")
