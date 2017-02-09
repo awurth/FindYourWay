@@ -1,5 +1,6 @@
 package boundary.User;
 
+import com.wordnik.swagger.annotations.Api;
 import control.KeyGenerator;
 
 import entity.User;
@@ -25,7 +26,8 @@ import java.util.Date;
 
 @Path("/authentication")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)@Api(value = "/authentication", description = "To login")
+
 public class AuthenticationEndpoint {
 
     @Inject

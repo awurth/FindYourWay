@@ -1,6 +1,7 @@
 package boundary.Question;
 
 import boundary.Representation;
+import com.wordnik.swagger.annotations.Api;
 import entity.Hint;
 import entity.Question;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/hints", description = "Hints management")
 public class HintRepresentation extends Representation{
     @EJB
     private QuestionResource questionResource;

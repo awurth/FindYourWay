@@ -2,6 +2,7 @@ package boundary.Question;
 
 import boundary.Point.PointRepresentation;
 import boundary.Point.PointResource;
+import com.wordnik.swagger.annotations.Api;
 import entity.Point;
 import entity.Question;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/questions", description = "Questions management")
 public class QuestionRepresentation {
 
     @EJB

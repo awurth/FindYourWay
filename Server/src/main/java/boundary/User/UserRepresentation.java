@@ -1,6 +1,7 @@
 package boundary.User;
 
 import boundary.Representation;
+import com.wordnik.swagger.annotations.Api;
 import control.PasswordManagement;
 import entity.User;
 import entity.UserRole;
@@ -18,6 +19,7 @@ import java.util.List;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/users", description = "Users management")
 public class UserRepresentation extends Representation {
 
     @EJB

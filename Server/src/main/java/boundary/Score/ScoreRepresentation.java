@@ -3,6 +3,7 @@ package boundary.Score;
 import boundary.Question.QuestionResource;
 import boundary.Representation;
 import boundary.User.UserResource;
+import com.wordnik.swagger.annotations.Api;
 import entity.Score;
 import entity.User;
 import entity.UserRole;
@@ -14,10 +15,11 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-@Path("/score")
+@Path("/scores")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/scores", description = "Scores management")
 public class ScoreRepresentation extends Representation {
     
     @EJB
