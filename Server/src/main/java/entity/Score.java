@@ -33,8 +33,7 @@ public class Score implements Serializable {
      * @param user who made this score
      * @param value : score points
      */
-    public Score(Question question, User user, long value) {
-        this.question = question;
+    public Score(User user, long value) {
         this.user = user;
         this.value = value;
     }
@@ -45,16 +44,6 @@ public class Score implements Serializable {
      */
     public boolean isValid() {
         return (question != null && user != null && (Long.toString(value) != null && value >= 0));
-    }
-
-    /**
-     * Method to update from another score
-     * @param score
-     */
-    public void update(Score score) {
-        user = score.getUser();
-        question = score.getQuestion();
-        value = score.getValue();
     }
     
     /**
