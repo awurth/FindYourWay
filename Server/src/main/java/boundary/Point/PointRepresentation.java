@@ -9,6 +9,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
 import static javax.ws.rs.HttpMethod.PUT;
 
 import javax.ws.rs.core.Context;
@@ -22,7 +23,7 @@ public class PointRepresentation extends Representation {
 
     @GET
     public Response getAll() {
-        GenericEntity<List<Point>> list = new GenericEntity<List<Point>>(pointResource.findAll()){};
+        GenericEntity<List<Point>> list = new GenericEntity<List<Point>>(pointResource.findAll()) {};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
@@ -36,21 +37,21 @@ public class PointRepresentation extends Representation {
 
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
-    
+
     @POST
     public Response add(@Context UriInfo uriInfo, Point point) {
-         if (point == null)
-             flash(400, EMPTY_JSON);
+        if (point == null)
+            flash(400, EMPTY_JSON);
 
         point = pointResource.insert(point);
         return Response.ok(point, MediaType.APPLICATION_JSON).build();
     }
-    
+
     @PUT
     public Response update(Point point) {
         if (point == null)
             flash(400, EMPTY_JSON);
-        
+
         point = pointResource.findById(point.getId());
 
         if (point == null)

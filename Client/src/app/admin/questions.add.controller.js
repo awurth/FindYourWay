@@ -74,7 +74,7 @@ export default function AdminAddQuestionController ($scope, $state, NgMap, Quest
   // Save question
   $scope.submitQuestion = () => {
     Question.save({ points: $scope.points }, () => {
-      $state.go('admin.questions')
+      $state.go('admin.questions.all')
     })
   }
 }
