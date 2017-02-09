@@ -11,7 +11,13 @@ import provider.Secured;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 
 @Path("/score")
@@ -57,47 +63,44 @@ public class ScoreRepresentation extends Representation {
     }
     
     @DELETE
-    @Path("/{id}")
     @Secured({UserRole.CUSTOMER})
-    public Response delete(@PathParam("id") String id, @Context SecurityContext securityContext) {
-        Score score = scoreResource.findById(id);
-
+    public Response delete(@Context SecurityContext securityContext, Score score) {
         if(score == null)
+            flash(400, EMPTY_JSON);
+        
+        if(scoreResource.findById(score.getId()) == null) 
             return Response.noContent().build();
 
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
         if (!score.getUser().equals(user))
             return Response.status(Response.Status.UNAUTHORIZED).build();
-
+        
         scoreResource.delete(score);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @PUT
-    @Path("/{id}")
     @Secured({UserRole.CUSTOMER})
-    public Response update(@PathParam("id") String id, @Context SecurityContext securityContext, Score score) {
+    public Response update(@Context SecurityContext securityContext, Score score) {
         if(score == null)
             flash(400, EMPTY_JSON);
+        
+        score = scoreResource.findById(score.getId());
 
-        if(!score.isValid())
-            flash(400, INVALID_JSON);
-
-        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
-        Score originalScore = scoreResource.findById(id);
-
-        if (originalScore == null)
+        if(score == null) 
             return Response.noContent().build();
 
-        if (!originalScore.getUser().equals(user))
+        if(!score.isValid())
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
+
+        if (!score.getUser().equals(user))
             return Response.status(Response.Status.UNAUTHORIZED).build();
 
         if (questionResource.findById(score.getQuestion().getId()) == null)
             flash(404, "Error : Question does not exist");
-
-        originalScore.update(score);
-        scoreResource.update(score);
         
         return Response.status(Response.Status.NO_CONTENT).build();
     }
