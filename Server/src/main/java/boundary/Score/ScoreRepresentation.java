@@ -15,13 +15,7 @@ import provider.Secured;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 @Path("/scores")
@@ -95,6 +89,7 @@ public class ScoreRepresentation extends Representation {
     }
     
     @DELETE
+    @Path("/{id}")
     @ApiOperation(value = "Delete a score by its id", notes = "Access : Customer only")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No content"),
@@ -137,7 +132,6 @@ public class ScoreRepresentation extends Representation {
 
         if(score == null) 
             return Response.noContent().build();
-
 
         if (!score.isValid())
             flash(400, INVALID_JSON);
