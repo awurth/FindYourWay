@@ -12,7 +12,14 @@
     </div>
     <div ng-if="user">
       <ul class="nav navbar-nav navbar-right">
-        <li><a ui-sref="admin">{{user.name}}</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a ui-sref="admin">My account</a></li>
+            <li><a ui-sref="disconnect">Disconnect</a></li>
+          </ul>
+        </li>
+
       </ul>
     </div>
   </div>

@@ -27,6 +27,7 @@ export default class AuthService {
 
   logout () {
     // User.signout()
+    delete (this.$rootScope.user)
     this.JWTService.removeToken()
   }
 }
