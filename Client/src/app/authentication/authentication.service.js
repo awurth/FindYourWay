@@ -8,10 +8,8 @@ export default class AuthService {
   }
 
   check () {
-    this.$rootScope.authenticated = this.JWTService.getToken() != null
     return this.User.loggedIn((user) => {
       this.$rootScope.user = user
-      this.$rootScope.authenticated = true
     }, (response) => {
       this.$state.go('login')
     }).$promise
