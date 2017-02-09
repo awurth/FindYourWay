@@ -5,8 +5,14 @@ import boundary.Point.PointResource;
 import com.wordnik.swagger.annotations.Api;
 import boundary.Representation;
 
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import entity.Point;
 import entity.Question;
+import entity.UserRole;
+import provider.Secured;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
@@ -29,6 +35,11 @@ public class QuestionRepresentation extends Representation {
     private PointResource pointResource;
 
     @GET
+    @ApiOperation(value = "Get all the questions", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response get(@Context UriInfo uriInfo) {
         List<Question> questions = questionResource.findAll();
         questions.parallelStream().forEach(question -> {
@@ -40,19 +51,23 @@ public class QuestionRepresentation extends Representation {
             });
         });
 
-        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions) {
-        };
-
+        GenericEntity<List<Question>> list = new GenericEntity<List<Question>>(questions) {};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Path("/{id}")
+    @ApiOperation(value = "Get a question by its id", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response get(@Context UriInfo uriInfo, @PathParam("id") String id) {
         Question question = questionResource.findById(id);
 
         if (question == null)
-            return Response.noContent().build();
+            flash(404, "Error : question does not exist");
 
         question.getLinks().clear();
         question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
@@ -60,7 +75,7 @@ public class QuestionRepresentation extends Representation {
         List<Point> points = question.getPoints();
         points.parallelStream().forEach(point -> {
              point.getLinks().clear();
-             point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+             point.addLink(getUriForSelfPoint(uriInfo, point), "self");
         });
 
         question.setPoints(points);
@@ -69,6 +84,14 @@ public class QuestionRepresentation extends Representation {
     }
 
     @POST
+    @Secured({UserRole.CUSTOMER, UserRole.ADMIN})
+    @ApiOperation(value = "Add a question", notes = "Access : Customer and Admin")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response add(@Context UriInfo uriInfo, Question question) {
         if (question == null)
             flash(400, EMPTY_JSON);
@@ -92,12 +115,20 @@ public class QuestionRepresentation extends Representation {
     
     @DELETE
     @Path("/{id}")
+    @Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Delete a question by its id", notes = "Access : Admin")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response delete(@PathParam("id") String id) {
         Question question = questionResource.findById(id);
 
         if (question == null)
-            return Response.noContent().build();
-        
+            flash(404, "Error : question does not exist");
+
         questionResource.delete(question);
         
         return Response.status(204).build();
@@ -105,11 +136,20 @@ public class QuestionRepresentation extends Representation {
 
     @PUT
     @Path("/{id}")
+    @Secured({UserRole.ADMIN})
+    @ApiOperation(value = "Update a question by its id", notes = "Access : Admin")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response edit(@PathParam("id") String id, Question question) {
         Question originalQuestion = questionResource.findById(id);
 
         if (originalQuestion == null)
-            return Response.noContent().build();
+            flash(404, "Error : question does not exist");
 
         if (question == null)
             flash(400, EMPTY_JSON);

@@ -4,6 +4,7 @@ package boundary.Game;
 import boundary.Question.QuestionResource;
 import boundary.Representation;
 import boundary.User.UserResource;
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
@@ -29,6 +30,7 @@ import javax.ws.rs.core.*;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/games", description = "Games management")
 public class GameRepresentation extends Representation {
 
     @EJB
