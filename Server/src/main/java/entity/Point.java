@@ -73,6 +73,17 @@ public class Point implements Serializable {
     }
 
     /**
+     * Method to update a point from another one
+     * @param point
+     */
+    public void update(Point point) {
+        longitude = point.getLongitude();
+        latitude = point.getLatitude();
+        name = point.getName();
+        hint = point.getHint();
+        isFinal = isFinal();
+    }
+    /**
      * Helper method to generate an id and set it to this.id
      * this method also removes hyphens
      */

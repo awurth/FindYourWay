@@ -4,6 +4,10 @@ package boundary.Game;
 import boundary.Question.QuestionResource;
 import boundary.Representation;
 import boundary.User.UserResource;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import entity.Game;
 import entity.Question;
 import entity.User;
@@ -26,6 +30,7 @@ import javax.ws.rs.core.*;
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "/games", description = "Games management")
 public class GameRepresentation extends Representation {
 
     @EJB
@@ -39,6 +44,12 @@ public class GameRepresentation extends Representation {
 
     @GET
     @Path("/{id}")
+    @ApiOperation(value = "Get a game by its id", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Game Not Found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public Response get(@PathParam("id") String id) {
        Game game = gameResource.findById(id);
        if (game == null)
@@ -48,48 +59,41 @@ public class GameRepresentation extends Representation {
     }
     
     @POST
-    @Secured({UserRole.CUSTOMER})
-    @ApiOperation(value = "Create a game from nothing", notes = "Access : Owner only")
+    @ApiOperation(value = "Create a random game", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response add(@Context SecurityContext securityContext) {
+    public Response add() {
         Game game = new Game();
         game.init();
-        
-        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
-        game.setUser(user);
-        
-        //on charge une question au hasard
         List<Question> questions = questionResource.findAll();
         double rnd = Math.random() * (questions.size()-1);
-        int indice = (int)(rnd - (rnd%1));
-        game.setQuestion(questions.get(indice));
-        
-        if (game == null)
-            flash(400, EMPTY_JSON);
-        
-        if (!game.isValid())
-            flash(400, INVALID_JSON);
-
-        if (questionResource.findById(game.getQuestion().getId()) == null)
-            flash(400, "Error : the question does not exist");
+        int i = (int)(rnd - (rnd%1));
+        game.setQuestion(questions.get(i));
 
         return Response.ok(gameResource.insert(game), MediaType.APPLICATION_JSON).build();
     }
     
 
     @DELETE
-    public Response delete(Game game) {
-        if(game == null)
-            flash(400, EMPTY_JSON);
-        
-        if (gameResource.findById(game.getId()) == null)
-            return Response.noContent().build();
+    @Secured({UserRole.ADMIN})
+    @Path("/{id}")
+    @ApiOperation(value = "Delete a game by its id", notes = "Access : Owner only")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response delete(@PathParam("id") String id) {
+        Game game = gameResource.findById(id);
+
+        if (game == null)
+            flash(404, "Error : Game does not exist");
 
         gameResource.delete(game);
 
