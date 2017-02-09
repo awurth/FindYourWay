@@ -1,4 +1,9 @@
+
 export default function LoginController ($scope, AuthService, $state) {
+  AuthService.check().then(() => {
+    $state.go('home')
+  })
+
   $scope.user = {}
 
   $scope.login = (isValid) => {
