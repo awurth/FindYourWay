@@ -44,11 +44,9 @@ public class GameRepresentation extends Representation {
 
     @GET
     @Path("/{id}")
-    @Secured({UserRole.CUSTOMER})
-    @ApiOperation(value = "Get a game by its id", notes = "Access : Owner only")
+    @ApiOperation(value = "Get a game by its id", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Game Not Found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
@@ -57,16 +55,11 @@ public class GameRepresentation extends Representation {
        if (game == null)
             flash(404, "Error : Game does not exist");
 
-       String currentEmail = securityContext.getUserPrincipal().getName();
-       if (!currentEmail.equals(game.getUser().getEmail()))
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-
        return Response.ok(game, MediaType.APPLICATION_JSON).build();
     }
     
     @POST
-    @Secured({UserRole.CUSTOMER})
-    @ApiOperation(value = "Create a random game", notes = "Access : Customer only")
+    @ApiOperation(value = "Create a random game", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -76,10 +69,6 @@ public class GameRepresentation extends Representation {
     public Response add(@Context SecurityContext securityContext) {
         Game game = new Game();
         game.init();
-        
-        User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
-
-        game.setUser(user);
 
         List<Question> questions = questionResource.findAll();
         double rnd = Math.random() * (questions.size()-1);
@@ -91,7 +80,7 @@ public class GameRepresentation extends Representation {
     
 
     @DELETE
-    @Secured({UserRole.CUSTOMER})
+    @Secured({UserRole.ADMIN})
     @Path("/{id}")
     @ApiOperation(value = "Delete a game by its id", notes = "Access : Owner only")
     @ApiResponses(value = {
@@ -105,11 +94,6 @@ public class GameRepresentation extends Representation {
 
         if (game == null)
             flash(404, "Error : Game does not exist");
-
-        String currentEmail = securityContext.getUserPrincipal().getName();
-
-        if (!game.getUser().getEmail().equals(currentEmail))
-            return Response.status(Response.Status.UNAUTHORIZED).build();
 
         gameResource.delete(game);
 
