@@ -8,12 +8,16 @@
     </ng-map>
   </div>
   <div class="container-fluid text-center">
+    <div class="pull-right">
+      <h1>Score</h1>
+      <h2>{{ score }}</h2>
+    </div>
     <h2>{{ questionPoint.name }}</h2>
     <h3 ng-if="!questionPoint.final">{{ questionPoint.hint }}</h3>
     <div ng-if="questionPoint.final">
       <h3>Final point hints</h3>
       <ul class="list-unstyled">
-        <li ng-repeat="hint in hints">{{ hint }}</li>
+        <li ng-repeat="hint in hints">{{ $index + 1 }}. {{ hint.value }}</li>
       </ul>
     </div>
     <button ng-if="selecting" ng-click="validatePoint()" class="large success button">Validate location</button>
