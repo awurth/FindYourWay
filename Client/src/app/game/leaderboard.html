@@ -1,5 +1,14 @@
 <div class="container">
   <h1>Les plus grands scores</h1>
+
+  <form>
+    <div class="form-group">
+        <label for="limit" class="col-xs-1">Offset</label>
+        <div class="col-xs-2 selectContainer">
+            <select ng-options="item for item in limits" ng-model="currentLimit" ng-change="limitChanged(currentLimit)" class="form-control"></select>
+        </div>
+    </div>
+  </form>
   <table class="table table-bordered">
     <tr>
       <th>Name</th>
@@ -10,4 +19,6 @@
       <td>{{score.value}}</td>
     </tr>
   </table>
+
+
 </div>
