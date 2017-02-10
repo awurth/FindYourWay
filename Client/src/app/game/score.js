@@ -4,7 +4,7 @@ export default function Score ($resource, API) {
     update: { method: 'PUT' },
     pagination: {
       method: 'GET',
-      url: API.url + 'scores/pages',
+      url: API.url + 'scores/items',
       params: {offset: '@offset', limit: '@limit'},
       isArray: true
     }
