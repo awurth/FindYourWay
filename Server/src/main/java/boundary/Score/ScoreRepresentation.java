@@ -87,14 +87,14 @@ public class ScoreRepresentation extends Representation {
 
     @GET
     @Context
-    @Path("/pages/{offset}/{limit}")
+    @Path("/pages")
     @ApiOperation(value = "Get all the scores (ordered by DESC) with a pagination method. Warning : Offset starts at 1 ! Limit : 0 is unlimited", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response pagination(@PathParam("offset") int number, @PathParam("limit") int limit) {
+    public Response pagination(@QueryParam("offset") int number, @QueryParam("limit") int limit) {
         List<Score> scores = scoreResource.offsetLimit(number,limit);
 
         if (scores == null || scores.isEmpty())
