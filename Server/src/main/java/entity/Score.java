@@ -33,8 +33,9 @@ public class Score implements Serializable {
      * @param user who made this score
      * @param value : score points
      */
-    public Score(User user, long value) {
+    public Score(User user, Question question, long value) {
         this.user = user;
+        this.question = question;
         this.value = value;
     }
 
