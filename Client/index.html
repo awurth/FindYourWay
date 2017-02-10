@@ -7,13 +7,16 @@
 
     <title>Find Your Way</title>
 
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+      if (typeof require != 'undefined') {
+        window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js')
+      }
+    </script>
+    <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
   </head>
   <body ng-app="app">
     <topbar></topbar>
     <ui-view></ui-view>
-
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
   </body>
-
 </html>
