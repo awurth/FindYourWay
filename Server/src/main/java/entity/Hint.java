@@ -46,7 +46,7 @@ public class Hint {
      * @return if the hint is valid
      */
     public boolean isValid() {
-        return (question != null && value != null);
+        return (value != null);
     }
 
     /**

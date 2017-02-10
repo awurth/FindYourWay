@@ -9,8 +9,8 @@ import java.io.IOException;
 @Provider
 public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
-    private final static String METHODS = "GET,POST,PUT,DELETE,OPTIONS,HEAD";
-    private final static String HEADERS = "origin,content-type,accept,authorization";
+    private final static String METHODS = "GET, POST, PUT, DELETE, OPTIONS, HEAD";
+    private final static String HEADERS = "origin, content-type, accept, authorization";
     private final static int TIME = 15 * 60;
 
     @Override
