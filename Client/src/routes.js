@@ -18,7 +18,7 @@ export default function route ($stateProvider) {
     })
     .state('leaderboard', {
       url: '/leaderboard',
-      template: require('./app/leaderboard/leaderboard.html'),
+      template: require('./app/game/leaderboard.html'),
       controller: 'LeaderBoardCtrl'
     })
     .state('disconnect', {
