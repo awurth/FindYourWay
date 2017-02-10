@@ -112,7 +112,7 @@ public class QuestionRepresentation extends Representation {
         if (question == null)
             return flash(400, EMPTY_JSON);
 
-        if (!question.isPointsValid())
+        if (!question.isValid())
             return flash(400, INVALID_JSON);
 
         question.getLinks().clear();
