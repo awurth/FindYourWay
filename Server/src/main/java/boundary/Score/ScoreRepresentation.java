@@ -15,6 +15,9 @@ import provider.Secured;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -94,15 +97,21 @@ public class ScoreRepresentation extends Representation {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response pagination(@QueryParam("offset") int number, @QueryParam("limit") int limit) {
-        List<Score> scores = scoreResource.offsetLimit(number,limit);
+    public Response pagination(@QueryParam("offset") int offset, @QueryParam("limit") int limit) {
+        if (offset < 0 || limit < 0)
+            flash(404, "Error : there is no results on this page");
 
-        if (scores == null || scores.isEmpty())
+        List<Score> scores = scoreResource.offsetLimit(offset,limit);
+
+        if (scores == null || scores.isEmpty() )
             flash(404, "Error : there is no results on this page");
 
         scores = makeLinks(this.uriInfo, scores);
         GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scores){};
-        return Response.ok(list, MediaType.APPLICATION_JSON).build();
+
+        return Response.ok(list, MediaType.APPLICATION_JSON)
+                .header("total", scoreResource.countAll())
+                .build();
     }
 
     @POST

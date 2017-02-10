@@ -61,6 +61,18 @@ public class ScoreResource {
                 .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
                 .getResultList();
     }
+
+    /**
+     * Method to count Score rows in the database
+     * countAll bugs as fuck so let's use this ugly way :(
+     * @return int
+     */
+    public Long countAll() {
+       return (long) entityManager.createNamedQuery("Score.findAll", Score.class)
+               .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
+               .getResultList()
+               .size();
+    }
     
     /**
      * Method that inserts a score into the database
