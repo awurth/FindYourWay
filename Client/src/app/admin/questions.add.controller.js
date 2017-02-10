@@ -3,7 +3,13 @@ export default function AdminAddQuestionController ($scope, $state, NgMap, Quest
   $scope.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBevGWdiDClK7DvnpjA0l96DcaIp_NqD6g'
   $scope.flagIconUrl = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
   $scope.pointsCount = 6
-  $scope.finalPointHints = []
+  $scope.finalPointHints = [
+    { value: '' },
+    { value: '' },
+    { value: '' },
+    { value: '' },
+    { value: '' }
+  ]
   $scope.points = []
   $scope.point = {}
   $scope.editIndex = null
@@ -25,12 +31,11 @@ export default function AdminAddQuestionController ($scope, $state, NgMap, Quest
       name: $scope.point.name ? '' : 'The point must have a name',
       latitude: $scope.point.latitude ? '' : 'The point must have a latitude',
       longitude: $scope.point.longitude ? '' : 'The point must have a longitude',
-      hint: $scope.point.hint ? '' : 'The point must have a hint',
-      finalPointHint: $scope.point.finalHint.value ? '' : 'You must add a hint for the final point'
+      hint: $scope.point.hint ? '' : 'The point must have a hint'
     }
 
     // If points are valid
-    if (!$scope.errors.name && !$scope.errors.latitude && !$scope.errors.longitude && !$scope.errors.hint && !$scope.errors.finalPointHint) {
+    if (!$scope.errors.name && !$scope.errors.latitude && !$scope.errors.longitude && !$scope.errors.hint) {
       // If we are creating a new point
       if ($scope.editIndex === null) {
         // Set final point
@@ -46,11 +51,9 @@ export default function AdminAddQuestionController ($scope, $state, NgMap, Quest
         }
 
         $scope.points.push($scope.point)
-        $scope.finalPointHints.push($scope.point.finalHint)
       } else {
         // If we are editing an existing point
         $scope.points[$scope.editIndex] = $scope.point
-        $scope.finalPointHints[$scope.editIndex] = $scope.point.finalHint
         $scope.editIndex = null
       }
 
@@ -92,10 +95,16 @@ export default function AdminAddQuestionController ($scope, $state, NgMap, Quest
    * Save question
    */
   $scope.submitQuestion = () => {
-    let points = $scope.points.slice()
-    points.forEach((point) => {
-      delete point.finalHint
+    $scope.hintsError = ''
+    $scope.finalPointHints.forEach((hint) => {
+      if (!hint.value) {
+        $scope.hintsError = 'You must add 5 hints to your question'
+      }
     })
+
+    if ($scope.hintsError) {
+      return
+    }
 
     Question.save({ points: $scope.points, hints: $scope.finalPointHints }, () => {
       $state.go('admin.questions.all')
