@@ -167,7 +167,7 @@ public class QuestionRepresentation extends Representation {
 
     @PUT
     @Path("/{id}")
-    @Secured({UserRole.ADMIN})
+    @Secured({UserRole.CUSTOMER/*UserRole.ADMIN*/})
     @ApiOperation(value = "Update a question by its id", notes = "Access : Admin")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No content"),

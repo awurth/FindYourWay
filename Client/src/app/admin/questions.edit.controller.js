@@ -8,6 +8,12 @@ export default function AdminEditQuestionController ($scope, $state, $stateParam
   $scope.editIndex = null
 
   Question.get({ id: $stateParams.id }, (question) => {
+    question.points.forEach((point) => {
+      delete point.id
+      delete point.links
+      delete point.valid
+    })
+
     $scope.points = question.points
   })
 
