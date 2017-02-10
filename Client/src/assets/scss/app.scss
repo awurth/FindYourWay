@@ -5,14 +5,14 @@ $sidebarWith: 250px;
 
 body {
   padding-top: 70px;
-  padding-bottom: 500px;
+  padding-bottom: 300px;
 }
 
 .topbar {
   @extend .navbar, .navbar-inverse, .navbar-fixed-top;
 
   .right.menu {
-    @extend .nav, .navbar-nav, .navbar-right
+    @extend .nav, .navbar-nav, .navbar-right;
   }
 }
 
@@ -118,6 +118,7 @@ body {
     @extend .btn-lg;
   }
 }
+
 .message {
   @extend .alert;
   &.success {
