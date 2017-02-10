@@ -32,7 +32,7 @@
       <td>{{ p.latitude }}</td>
       <td>{{ p.longitude }}</td>
       <td>{{ p.hint }}</td>
-      <td>{{ p.finalHint }}</td>
+      <td>{{ p.finalHint.value }}</td>
       <td class="right aligned">
         <button class="small success button" ng-if="!p.final" ng-click="setFinalPoint(p)">
           Set final
@@ -78,7 +78,7 @@
       </div>
       <div class="field" ng-class="errors.finalPointHint ? 'has-error' : ''">
         <label for="final-hint">Final point hint</label>
-        <input type="text" id="final-hint" class="input" ng-model="point.finalHint">
+        <input type="text" id="final-hint" class="input" ng-model="point.finalHint.value">
         <span class="help-block">{{ errors.finalPointHint }}</span>
       </div>
 

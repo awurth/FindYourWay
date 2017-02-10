@@ -36,7 +36,7 @@ export default function AdminEditQuestionController ($scope, $state, $stateParam
       latitude: $scope.point.latitude ? '' : 'The point must have a latitude',
       longitude: $scope.point.longitude ? '' : 'The point must have a longitude',
       hint: $scope.point.hint ? '' : 'The point must have a hint',
-      finalPointHint: $scope.point.finalHint ? '' : 'You must add a hint for the final point'
+      finalPointHint: $scope.point.finalHint.value ? '' : 'You must add a hint for the final point'
     }
 
     // If points are valid
@@ -56,11 +56,11 @@ export default function AdminEditQuestionController ($scope, $state, $stateParam
         }
 
         $scope.points.push($scope.point)
-        $scope.finalPointHints.push({ value: $scope.point.finalHint })
+        $scope.finalPointHints.push($scope.point.finalHint)
       } else {
         // If we are editing an existing point
         $scope.points[$scope.editIndex] = $scope.point
-        $scope.finalPointHints[$scope.editIndex] = { value: $scope.point.finalHint }
+        $scope.finalPointHints[$scope.editIndex] = $scope.point.finalHint
         $scope.editIndex = null
       }
 
