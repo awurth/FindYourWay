@@ -21,6 +21,7 @@ public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final int PATH_LENGTH = 6;
 
+
     @Id
     private String id;
 
@@ -92,7 +93,7 @@ public class Question implements Serializable {
      * @return if it's valid
      */
     public boolean isHintsValid() {
-        if (hints.size() != PATH_LENGTH)
+        if (hints.size() != PATH_LENGTH - 1)
             return false;
 
         for (Hint hint : hints) {
