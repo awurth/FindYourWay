@@ -1,0 +1,13 @@
+<div class="container">
+  <h1>Les plus grands scores</h1>
+  <table class="table table-bordered">
+    <tr>
+      <th>Name</th>
+      <th>Score</th>
+    </tr>
+    <tr ng-repeat="score in scores">
+      <td>{{score.user.name}}</td>
+      <td>{{score.value}}</td>
+    </tr>
+  </table>
+</div>

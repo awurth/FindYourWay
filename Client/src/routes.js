@@ -16,6 +16,11 @@ export default function route ($stateProvider) {
       template: require('./app/authentication/register.html'),
       controller: 'RegisterCtrl'
     })
+    .state('leaderboard', {
+      url: '/leaderboard',
+      template: require('./app/leaderboard/leaderboard.html'),
+      controller: 'LeaderBoardCtrl'
+    })
     .state('disconnect', {
       url: '/disconnect',
       controller: ['AuthService', function (AuthService) {
