@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s ORDER BY s.value DESC"),
+        @NamedQuery(name = "Score.countAll", query = "SELECT COUNT(s) FROM Score s"),
 })
 public class Score implements Serializable {
     
