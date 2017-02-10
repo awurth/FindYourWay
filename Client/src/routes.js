@@ -32,7 +32,8 @@ export default function route ($stateProvider) {
     /*******************************/
     .state('admin', {
       url: '/admin',
-      template: require('./app/admin/admin.html')
+      template: require('./app/admin/admin.html'),
+      controller: 'AdminCtrl'
     })
     .state('admin.questions', {
       abstract: true,
@@ -53,7 +54,7 @@ export default function route ($stateProvider) {
       template: require('./app/admin/questions.edit.html'),
       controller: 'AdminEditQuestionCtrl'
     })
-    .state('games', {
+    .state('game', {
       url: '/games/{id}',
       template: require('./app/game/game.html'),
       controller: 'GameCtrl'

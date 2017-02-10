@@ -1,7 +1,8 @@
 import route from './routes'
 
-export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, $q) {
+export default function config ($httpProvider, $stateProvider, $urlRouterProvider, $locationProvider, $qProvider) {
   $locationProvider.html5Mode(true)
+  $qProvider.errorOnUnhandledRejections(false)
 
   // Add Authorization header with JWT if user is authenticated
   $httpProvider.interceptors.push(['JWTService', (JWTService) => {
@@ -22,4 +23,4 @@ export default function config ($httpProvider, $stateProvider, $urlRouterProvide
   $urlRouterProvider.otherwise('/')
 }
 
-config.$inject = ['$httpProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider']
+config.$inject = ['$httpProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider', '$qProvider']
