@@ -44,7 +44,30 @@ public class ScoreRepresentation extends Representation {
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public Response getAll() {
-        GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scoreResource.findAll()){};
+       List<Score> scores = scoreResource.findAll();
+       scores.parallelStream().forEach(score -> {
+           Question question = questionResource.findById(score.getQuestion().getId());
+           question.getLinks().clear();
+           question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
+
+           List<Point> points = question.getPoints();
+           List<Hint> hints = question.getHints();
+           for (Point point : points) {
+               point.getLinks().clear();
+               point.addLink(getUriForSelfPoint(uriInfo, point), "self");
+           }
+
+           for (Hint hint : hints) {
+               hint.getLinks().clear();
+               hint.addLink(getUriForSelfHint(uriInfo, hint), "self");
+           }
+
+            question.setPoints(points);
+            score.setQuestion(question);
+        });
+
+        GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scores){};
+
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
@@ -60,6 +83,26 @@ public class ScoreRepresentation extends Representation {
         Score score = scoreResource.findById(id);
         if (score == null)
             return flash(404, "Error : Score does not exist");
+
+        Question question = questionResource.findById(score.getQuestion().getId());
+        question.getLinks().clear();
+        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
+
+        List<Point> points = question.getPoints();
+        for (Point point : points) {
+            point.getLinks().clear();
+            point.addLink(getUriForSelfPoint(uriInfo, point), "self");
+        }
+
+        List<Hint> hints = question.getHints();
+        for (Hint hint : hints) {
+            hint.getLinks().clear();
+            hint.addLink(getUriForSelfHint(uriInfo, hint), "self");
+        }
+
+        question.setPoints(points);
+        score.setQuestion(question);
+
         return Response.ok(score, MediaType.APPLICATION_JSON).build();
     }
 
@@ -196,6 +239,5 @@ public class ScoreRepresentation extends Representation {
                 .build()
                 .toString();
     }
-
 
 }
