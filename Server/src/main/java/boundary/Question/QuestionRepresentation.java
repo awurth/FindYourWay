@@ -103,7 +103,13 @@ public class QuestionRepresentation extends Representation {
         question.addLink(getUriForSelfQuestion(uriInfo, question), "self");
 
         question.getPoints().forEach(point -> {
-            pointResource.insert(point);
+            if (point.getId() == null) {
+                pointResource.insert(point);
+            } else {
+                if (pointResource.findById(point.getId()) == null)
+                    pointResource.insert(point);
+            }
+
             point.getLinks().clear();
             point.addLink(getUriForSelfPoint(uriInfo, point), "point");
         });
