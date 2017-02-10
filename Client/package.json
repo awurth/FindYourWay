@@ -1,6 +1,7 @@
 {
   "name": "angular-webpack",
   "version": "1.0.0",
+  "main":"index.js",
   "scripts": {
     "build": "node build/build.js",
     "dev": "node build/dev-server.js"
@@ -10,7 +11,8 @@
     "angular-messages": "^1.6.1",
     "angular-resource": "^1.6.1",
     "angular-ui-router": "^1.0.0-rc.1",
-    "ngmap": "^1.18.0"
+    "ngmap": "^1.18.0",
+    "electron-prebuilt": "^1.4.13"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

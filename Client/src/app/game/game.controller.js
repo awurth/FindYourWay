@@ -117,7 +117,7 @@ export default function GameController ($scope, $state, $stateParams, $window, N
       }
 
       Score.save(score, () => {
-        $state.go('home')
+        $state.go('leaderboard')
       })
     }
   }
