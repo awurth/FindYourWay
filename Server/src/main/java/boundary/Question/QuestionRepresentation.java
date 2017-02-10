@@ -77,9 +77,6 @@ public class QuestionRepresentation extends Representation {
         if (question == null)
             return flash(404, "Error : question does not exist");
 
-        question.getLinks().clear();
-        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
-
         List<Point> points = question.getPoints();
 
         for (Point point : points) {
