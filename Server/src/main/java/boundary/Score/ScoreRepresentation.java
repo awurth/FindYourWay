@@ -1,5 +1,7 @@
 package boundary.Score;
 
+import boundary.Point.PointRepresentation;
+import boundary.Question.HintRepresentation;
 import boundary.Question.QuestionResource;
 import boundary.Representation;
 import boundary.User.UserResource;
@@ -7,9 +9,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import entity.Score;
-import entity.User;
-import entity.UserRole;
+import entity.*;
 import provider.Secured;
 
 import java.util.List;
@@ -33,6 +33,9 @@ public class ScoreRepresentation extends Representation {
 
     @EJB
     private QuestionResource questionResource;
+
+    @Context
+    private UriInfo uriInfo;
     
     @GET
     @ApiOperation(value = "Get all the scores", notes = "Access : Everyone")
@@ -76,17 +79,37 @@ public class ScoreRepresentation extends Representation {
 
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
 
-        score.setUser(user);
+        Question question = questionResource.findById(score.getQuestion().getId());
 
-        if (!score.isValid())
+        if (question == null)
+            return flash(404, "Error : question does not exist");
+
+        question.getLinks().clear();
+        question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
+
+        List<Point> points = question.getPoints();
+
+        for (Point point : points) {
+            point.getLinks().clear();
+            point.addLink(getUriForSelfPoint(uriInfo, point), "self");
+        }
+
+        List<Hint> hints = question.getHints();
+
+        for (Hint hint : hints) {
+            hint.getLinks().clear();
+            hint.addLink(getUriForSelfHint(uriInfo, hint), "self");
+        }
+
+        question.setPoints(points);
+
+        Score scoreInsert = new Score(user, question, score.getValue());
+
+        if (!scoreInsert.isValid())
             return flash(400, MISSING_FIELDS + ", also be sure the score is greater than 0");
 
-        if (questionResource.findById(score.getQuestion().getId()) == null)
-            return flash(404, "Error : Question does not exist");
 
-        score = scoreResource.insert(score);
-        
-        return Response.ok(score, MediaType.APPLICATION_JSON).build();
+        return Response.ok(scoreResource.insert(scoreInsert), MediaType.APPLICATION_JSON).build();
     }
     
     @DELETE
@@ -148,5 +171,31 @@ public class ScoreRepresentation extends Representation {
         
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+
+    private String getUriForSelfPoint(UriInfo uriInfo, Point point) {
+        return uriInfo.getBaseUriBuilder()
+                .path(PointRepresentation.class)
+                .path('/' + point.getId())
+                .build()
+                .toString();
+    }
+
+    private String getUriForSelfQuestion(UriInfo uriInfo, Question question) {
+        return uriInfo.getBaseUriBuilder()
+                .path(PointRepresentation.class)
+                .path('/' + question.getId())
+                .build()
+                .toString();
+    }
+
+    private String getUriForSelfHint(UriInfo uriInfo, Hint hint) {
+        return uriInfo.getBaseUriBuilder()
+                .path(HintRepresentation.class)
+                .path('/' + hint.getId())
+                .build()
+                .toString();
+    }
+
 
 }

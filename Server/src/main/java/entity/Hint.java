@@ -1,7 +1,10 @@
 package entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +21,10 @@ public class Hint {
     private Question question;
 
     private String value;
+
+    @Transient
+    @XmlElement(name="_links")
+    private List<Link> links = new ArrayList<>();
 
     /**
      * Empty Constructor
@@ -50,6 +57,15 @@ public class Hint {
         id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
+    /**
+     * Method to add a link
+     * @param uri uri link
+     * @param rel name
+     */
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(rel, uri));
+    }
+
     public String getId() {
         return id;
     }
@@ -72,5 +88,9 @@ public class Hint {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public List<Link> getLinks() {
+        return links;
     }
 }

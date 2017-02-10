@@ -8,6 +8,7 @@ import boundary.Representation;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import entity.Hint;
 import entity.Point;
 import entity.Question;
 import entity.UserRole;
@@ -18,6 +19,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
+import javax.ws.rs.core.HttpHeaders;
 
 @Path("/questions")
 @Stateless
@@ -34,13 +36,19 @@ public class QuestionRepresentation extends Representation {
     @EJB
     private PointResource pointResource;
 
+    @EJB
+    private HintResource hintResource;
+
+    @Context
+    UriInfo uriInfo;
+
     @GET
     @ApiOperation(value = "Get all the questions", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response get(@Context UriInfo uriInfo) {
+    public Response get() {
         List<Question> questions = questionResource.findAll();
         questions.parallelStream().forEach(question -> {
             question.getLinks().clear();
@@ -73,10 +81,18 @@ public class QuestionRepresentation extends Representation {
         question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
 
         List<Point> points = question.getPoints();
-        points.parallelStream().forEach(point -> {
-             point.getLinks().clear();
-             point.addLink(getUriForSelfPoint(uriInfo, point), "self");
-        });
+
+        for (Point point : points) {
+            point.getLinks().clear();
+            point.addLink(getUriForSelfPoint(uriInfo, point), "self");
+        }
+
+        List<Hint> hints = question.getHints();
+
+        for (Hint hint : hints) {
+            hint.getLinks().clear();
+            hint.addLink(getUriForSelfHint(uriInfo, hint), "self");
+        }
 
         question.setPoints(points);
 
@@ -92,7 +108,7 @@ public class QuestionRepresentation extends Representation {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response add(@Context UriInfo uriInfo, Question question) {
+    public Response add(Question question) {
         if (question == null)
             return flash(400, EMPTY_JSON);
 
@@ -112,6 +128,18 @@ public class QuestionRepresentation extends Representation {
 
             point.getLinks().clear();
             point.addLink(getUriForSelfPoint(uriInfo, point), "point");
+        });
+
+        question.getHints().forEach(hint -> {
+            if (hint.getId() == null) {
+                hintResource.insert(hint);
+            } else {
+                if (hintResource.findById(hint.getId()) == null)
+                    hintResource.insert(hint);
+            }
+
+            hint.getLinks().clear();
+            hint.addLink(getUriForSelfHint(uriInfo, hint), "hint");
         });
 
         question = questionResource.insert(question);
@@ -167,7 +195,6 @@ public class QuestionRepresentation extends Representation {
 
         return Response.status(204).build();
     }
-
     private String getUriForSelfPoint(UriInfo uriInfo, Point point) {
         return uriInfo.getBaseUriBuilder()
                 .path(PointRepresentation.class)
@@ -180,6 +207,14 @@ public class QuestionRepresentation extends Representation {
         return uriInfo.getBaseUriBuilder()
                 .path(PointRepresentation.class)
                 .path('/' + question.getId())
+                .build()
+                .toString();
+    }
+
+    private String getUriForSelfHint(UriInfo uriInfo, Hint hint) {
+        return uriInfo.getBaseUriBuilder()
+                .path(HintRepresentation.class)
+                .path('/' + hint.getId())
                 .build()
                 .toString();
     }
