@@ -1,4 +1,4 @@
-export default function CompareTo () {
+export default function CompareToDirective () {
   return {
     require: 'ngModel',
     scope: {

@@ -12,27 +12,40 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Game.findById", query = "SELECT g FROM Game g WHERE g.id = :id")
 })
 public class Game implements Serializable {
-    
+
+    public final static int LIMIT_DISTANCE = 10;
+
     @Id
     private String id;
+
+    private String token;
 
     @ManyToOne
     private Question question;
 
-    @OneToOne
-    private User user;
-
-    private long minimumDistance;
+    private int distance;
 
     /**
      * Empty Constructor
      */
-    public Game() {}
-    
-    public Game(long minimumDistance, Question question, User user) {
-        this.minimumDistance = minimumDistance;
-        this.question = question;
-        this.user = user;
+    public Game() { }
+
+    /**
+     * Method to init a game, it is a kind of session for a user
+     * distance is set at LIMIT_DISTANCE (km), it is a condition for the gameplay :
+     * at what distance maximum you have to place your marker on the map to get points
+     */
+    public void init() {
+        distance = LIMIT_DISTANCE;
+        generateToken();
+    }
+
+    /**
+     * Helper method to generate a token and set it
+     * this method also removes hyphens
+     */
+    public void generateToken() {
+        token = UUID.randomUUID().toString().replaceAll("-", "");;
     }
     
     /**
@@ -44,7 +57,7 @@ public class Game implements Serializable {
     }
     
     public boolean isValid() {
-        return (question != null && minimumDistance >= 0 && user != null);
+        return (question != null && distance >= 0);
     }
 
     public String getId() {
@@ -63,19 +76,15 @@ public class Game implements Serializable {
         this.question = question;
     }
 
-    public User getUser() {
-        return user;
+    public int getDistance() {
+        return distance;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 
-    public long getMinimumDistance() {
-        return minimumDistance;
-    }
-
-    public void setMinimumDistance(long minimumDistance) {
-        this.minimumDistance = minimumDistance;
+    public String getToken() {
+        return token;
     }
 }

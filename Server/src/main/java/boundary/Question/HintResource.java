@@ -16,6 +16,7 @@ public class HintResource {
 
     /**
      * Method to find a Hint by its id
+     *
      * @param id
      * @return Path
      */
@@ -25,6 +26,7 @@ public class HintResource {
 
     /**
      * Method to get all the hints from a Question
+     *
      * @param question
      * @return List of Hint
      */
@@ -36,16 +38,18 @@ public class HintResource {
 
     /**
      * Method that inserts a hint into the database
+     *
      * @param hint to add
      * @return the hint added
      */
-    public Hint insert(Hint hint){
+    public Hint insert(Hint hint) {
         hint.generateId();
         return entityManager.merge(hint);
     }
 
     /**
      * Method to delete a hint
+     *
      * @param hint
      */
     public void delete(Hint hint) {
@@ -54,6 +58,7 @@ public class HintResource {
 
     /**
      * Method to update a hint
+     *
      * @param hint
      * @return the updated hint
      */

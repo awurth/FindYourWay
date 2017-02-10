@@ -21,6 +21,12 @@ export default function route ($stateProvider) {
       template: require('./app/leaderboard/leaderboard.html'),
       controller: 'LeaderBoardCtrl'
     })
+    .state('disconnect', {
+      url: '/disconnect',
+      controller: ['AuthService', function (AuthService) {
+        AuthService.logout()
+      }]
+    })
     /*******************************/
     /* ---------- ADMIN ---------- */
     /*******************************/
@@ -29,7 +35,11 @@ export default function route ($stateProvider) {
       template: require('./app/admin/admin.html')
     })
     .state('admin.questions', {
-      url: '/questions',
+      abstract: true,
+      url: '/questions'
+    })
+    .state('admin.questions.all', {
+      url: '',
       template: require('./app/admin/questions.html'),
       controller: 'AdminQuestionsCtrl'
     })
@@ -43,8 +53,8 @@ export default function route ($stateProvider) {
       template: require('./app/admin/questions.edit.html'),
       controller: 'AdminEditQuestionCtrl'
     })
-    .state('game', {
-      url: '/game',
+    .state('games', {
+      url: '/games/{id}',
       template: require('./app/game/game.html'),
       controller: 'GameCtrl'
     })

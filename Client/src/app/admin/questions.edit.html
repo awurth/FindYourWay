@@ -1,8 +1,17 @@
 <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{ googleMapsUrl }}">
-  <ng-map center="48.866,2.333" zoom="5"></ng-map>
+  <ng-map center="48.866, 2.333" zoom="5" class="admin-question-map">
+    <div ng-repeat="p in points">
+      <marker ng-if="p.final" position="[{{ p.latitude }}, {{ p.longitude }}]" title="{{ p.name }}" icon="{{ flagIconUrl }}"></marker>
+      <marker ng-if="!p.final" position="[{{ p.latitude }}, {{ p.longitude }}]" title="{{ p.name }}"></marker>
+    </div>
+  </ng-map>
 </div>
-<table class="table table-striped table-hover" ng-if="points.length > 0">
-  <thead>
+<div class="admin-question-form">
+  <div class="page-header">
+    <h4 class="text-center">Select a location on the map or enter the latitude and longitude below</h4>
+  </div>
+  <table class="table table-striped table-hover" ng-if="points.length > 0">
+    <thead>
     <tr>
       <th>#</th>
       <th>Name</th>
@@ -11,47 +20,56 @@
       <th>Hint</th>
       <th class="right aligned">Actions</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <tr ng-repeat="p in points">
       <td>{{ $index + 1 }}</td>
-      <td>{{ p.name }}</td>
+      <td>
+        {{ p.name }}
+        <span class="label label-success">{{ p.final ? 'Final' : '' }}</span>
+      </td>
       <td>{{ p.latitude }}</td>
       <td>{{ p.longitude }}</td>
       <td>{{ p.hint }}</td>
       <td class="right aligned">
-        <button class="small warning button" ng-click="editPoint(p)">
+        <button class="small success button" ng-if="!p.final" ng-click="setFinalPoint(p)">
+          Set final
+        </button>
+        <button class="small warning button" title="Edit" ng-click="editPoint(p)">
           <span class="glyphicon glyphicon-edit"></span>
         </button>
-        <button class="small danger button" ng-click="deletePoint(p)">
+        <button class="small danger button" title="Delete" ng-click="deletePoint(p)">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
     </tr>
-  </tbody>
-</table>
-<form>
-  <div class="field" ng-class="errors.name ? 'has-error' : ''">
-    <label for="name">Name</label>
-    <input type="text" id="name" class="input" ng-model="point.name">
-    <span class="help-block">{{ errors.name }}</span>
-  </div>
-  <div class="field" ng-class="errors.latitude ? 'has-error' : ''">
-    <label for="latitude">Latitude</label>
-    <input type="text" id="latitude" class="input" ng-model="point.latitude">
-    <span class="help-block">{{ errors.latitude }}</span>
-  </div>
-  <div class="field" ng-class="errors.longitude ? 'has-error' : ''">
-    <label for="longitude">Longitude</label>
-    <input type="text" id="longitude" class="input" ng-model="point.longitude">
-    <span class="help-block">{{ errors.longitude }}</span>
-  </div>
-  <div class="field" ng-class="errors.hint ? 'has-error' : ''">
-    <label for="hint">Hint</label>
-    <input type="text" id="hint" class="input" ng-model="point.hint">
-    <span class="help-block">{{ errors.hint }}</span>
-  </div>
+    </tbody>
+  </table>
+  <form ng-if="points.length < pointsCount || editIndex != null" class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="field" ng-class="errors.name ? 'has-error' : ''">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="input" ng-model="point.name">
+        <span class="help-block">{{ errors.name }}</span>
+      </div>
+      <div class="field" ng-class="errors.latitude ? 'has-error' : ''">
+        <label for="latitude">Latitude</label>
+        <input type="text" id="latitude" class="input" ng-model="point.latitude">
+        <span class="help-block">{{ errors.latitude }}</span>
+      </div>
+      <div class="field" ng-class="errors.longitude ? 'has-error' : ''">
+        <label for="longitude">Longitude</label>
+        <input type="text" id="longitude" class="input" ng-model="point.longitude">
+        <span class="help-block">{{ errors.longitude }}</span>
+      </div>
+      <div class="field" ng-class="errors.hint ? 'has-error' : ''">
+        <label for="hint">Hint</label>
+        <input type="text" id="hint" class="input" ng-model="point.hint">
+        <span class="help-block">{{ errors.hint }}</span>
+      </div>
 
-  <input type="submit" class="primary button" value="Validate point" ng-click="validatePoint()">
-</form>
-<button class="success button" ng-if="points.length >= 5" ng-click="submitQuestion()">Submit question</button>
+      <input type="submit" class="large primary button" value="Validate point" ng-click="validatePoint()">
+    </div>
+  </form>
+  <button class="large success button" ng-if="points.length == pointsCount" ng-click="submitQuestion()">Submit question</button>
+</div>

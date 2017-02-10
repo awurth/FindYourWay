@@ -7,25 +7,65 @@ body {
 }
 
 .topbar {
-  @extend .navbar, .navbar-default, .navbar-fixed-top;
+  @extend .navbar, .navbar-inverse, .navbar-fixed-top;
 
   .right.menu {
     @extend .nav, .navbar-nav, .navbar-right
   }
 }
 
-/*********************************************/
-/* ---------- BOOTSTRAP OVERRIDES ---------- */
-/*********************************************/
+.sidebar {
+  @extend .navbar-inverse;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+
+  .nav {
+    @extend .navbar-nav;
+  }
+
+  .nav, .nav li {
+    display: block;
+    width: 100%;
+  }
+}
+
+.admin-container {
+  margin-top: -20px;
+  margin-left: 250px;
+}
+
+.admin-question-map {
+  height: 600px;
+}
+
+.admin-question-form {
+  padding: 0 50px;
+}
+
+.game-container {
+  margin-top: -20px;
+}
+
+.game-map {
+  height: 600px;
+}
+
 .ng-invalid {
-    border-color: red;
-    outline-color: red;
+  border-color: red;
+  outline-color: red;
 }
 
 .ng-valid {
-    border-color: green;
-    outline-color: green;
+  border-color: green;
+  outline-color: green;
 }
+
+/*********************************************/
+/* ---------- BOOTSTRAP OVERRIDES ---------- */
+/*********************************************/
 
 .messages {
   font-size: smaller;
@@ -48,6 +88,8 @@ body {
 
 .button {
   @extend .btn;
+  border-radius: 100px !important;
+  padding: 0.5em 2em !important;
   &.primary {
     @extend .btn-primary;
   }
@@ -74,7 +116,6 @@ body {
     @extend .btn-lg;
   }
 }
-
 .message {
   @extend .alert;
   &.success {

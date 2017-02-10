@@ -1,11 +1,11 @@
 
-export default function TopbarDirective () {
+export default function TopbarDirective (AuthService) {
   return {
     restrict: 'E',
     template: require('./topbar.directive.html'),
-    scope: {
-    },
     link: ($scope, element, attrs) => {
     }
   }
 }
+
+TopbarDirective.$inject = ['AuthService']
