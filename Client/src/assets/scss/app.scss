@@ -128,7 +128,7 @@ body {
   &.warning {
     @extend .alert-warning;
   }
-  &.danger {
+  &.error {
     @extend .alert-danger;
   }
 }

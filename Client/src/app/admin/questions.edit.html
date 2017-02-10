@@ -18,6 +18,7 @@
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Hint</th>
+      <th>Final point hint</th>
       <th class="right aligned">Actions</th>
     </tr>
     </thead>
@@ -31,6 +32,7 @@
       <td>{{ p.latitude }}</td>
       <td>{{ p.longitude }}</td>
       <td>{{ p.hint }}</td>
+      <td>{{ p.finalHint }}</td>
       <td class="right aligned">
         <button class="small success button" ng-if="!p.final" ng-click="setFinalPoint(p)">
           Set final
@@ -45,6 +47,13 @@
     </tr>
     </tbody>
   </table>
+
+  <div class="row" ng-if="error">
+    <div class="col-md-6 col-md-offset-3 text-center error message">
+      <p>{{ error }}</p>
+    </div>
+  </div>
+
   <form ng-if="points.length < pointsCount || editIndex != null" class="row">
     <div class="col-md-6 col-md-offset-3">
       <div class="field" ng-class="errors.name ? 'has-error' : ''">
@@ -66,6 +75,11 @@
         <label for="hint">Hint</label>
         <input type="text" id="hint" class="input" ng-model="point.hint">
         <span class="help-block">{{ errors.hint }}</span>
+      </div>
+      <div class="field" ng-class="errors.finalPointHint ? 'has-error' : ''">
+        <label for="final-hint">Final point hint</label>
+        <input type="text" id="final-hint" class="input" ng-model="point.finalHint">
+        <span class="help-block">{{ errors.finalPointHint }}</span>
       </div>
 
       <input type="submit" class="large primary button" value="Validate point" ng-click="validatePoint()">
