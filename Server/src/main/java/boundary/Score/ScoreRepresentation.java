@@ -90,7 +90,7 @@ public class ScoreRepresentation extends Representation {
 
     @GET
     @Context
-    @Path("/pages")
+    @Path("/items")
     @ApiOperation(value = "Get all the scores (ordered by DESC) with a pagination method. Warning : Offset starts at 1 ! Limit : 0 is unlimited", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
@@ -110,7 +110,9 @@ public class ScoreRepresentation extends Representation {
         GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scores){};
 
         return Response.ok(list, MediaType.APPLICATION_JSON)
-                .header("total", scoreResource.countAll())
+                .header("X-Pagination-Count", scoreResource.countAll())
+                .header("X-Pagination-Page", offset)
+                .header("X-Pagination-Limit", limit)
                 .build();
     }
 
