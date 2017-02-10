@@ -13,6 +13,7 @@ import AuthService from './app/authentication/authentication.service'
 import User from './app/user/user'
 import Question from './app/question/question'
 import Game from './app/game/game'
+import Score from './app/game/score'
 import LoginController from './app/authentication/login.controller'
 import RegisterController from './app/authentication/register.controller'
 import AdminController from './app/admin/admin.controller'
@@ -41,6 +42,7 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .controller('AdminEditQuestionCtrl', AdminEditQuestionController)
   .factory('Question', Question)
   .factory('Game', Game)
+  .factory('Score', Score)
   .directive('topbar', TopbarDirective)
   .directive('compareTo', CompareToDirective)
   .controller('HomeCtrl', HomeController)
