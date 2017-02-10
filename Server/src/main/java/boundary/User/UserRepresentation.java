@@ -54,8 +54,8 @@ public class UserRepresentation extends Representation {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public Response getAll(){
-        GenericEntity<List<User>> list = new GenericEntity<List<User>>(userResource.findAll()){};
+    public Response getAll() {
+        GenericEntity<List<User>> list = new GenericEntity<List<User>>(userResource.findAll()) {};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
@@ -68,14 +68,13 @@ public class UserRepresentation extends Representation {
             @ApiResponse(code = 500, message = "Internal server error")
     })
     @Path("/signedin")
-    public Response getClientInfo(@Context SecurityContext securityContext){
+    public Response getClientInfo(@Context SecurityContext securityContext) {
         User user = userResource.findByEmail(securityContext.getUserPrincipal().getName());
         JsonObject json = Json.createObjectBuilder()
-                .add("user", Json.createArrayBuilder()
-                        .add(Json.createObjectBuilder()
-                                .add("email", user.getEmail() )
-                                .add("name", user.getName() )
-                                .add("role", user.getRole().toString())))
+                .add("user", Json.createObjectBuilder()
+                        .add("email", user.getEmail())
+                        .add("name", user.getName())
+                        .add("role", user.getRole().toString()))
                 .build();
 
         return Response.ok(json, MediaType.APPLICATION_JSON).build();

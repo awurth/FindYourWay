@@ -1,4 +1,9 @@
+
 export default function RegisterController ($scope, AuthService, $state) {
+  AuthService.check().then(() => {
+    $state.go('home')
+  })
+
   $scope.user = {}
   $scope.register = (isValid) => {
     if (isValid) {

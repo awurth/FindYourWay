@@ -15,6 +15,7 @@ import Question from './app/question/question'
 import Game from './app/game/game'
 import LoginController from './app/authentication/login.controller'
 import RegisterController from './app/authentication/register.controller'
+import AdminController from './app/admin/admin.controller'
 import AdminQuestionsController from './app/admin/questions.controller'
 import AdminAddQuestionController from './app/admin/questions.add.controller'
 import AdminEditQuestionController from './app/admin/questions.edit.controller'
@@ -34,6 +35,7 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .config(config)
   .controller('LoginCtrl', LoginController)
   .controller('RegisterCtrl', RegisterController)
+  .controller('AdminCtrl', AdminController)
   .controller('AdminQuestionsCtrl', AdminQuestionsController)
   .controller('AdminAddQuestionCtrl', AdminAddQuestionController)
   .controller('AdminEditQuestionCtrl', AdminEditQuestionController)
@@ -44,14 +46,9 @@ export default angular.module('app', [resource, router, ngMap, ngMessages])
   .controller('HomeCtrl', HomeController)
   .controller('GameCtrl', GameController)
   .service('GeoService', GeoService)
-  .run(['$transitions', '$rootScope', '$state', ($transitions, $rootScope, $state) => {
+  .run(['$transitions', ($transitions) => {
     $transitions.onSuccess({}, (trans) => {
-      let routeName = trans.$to().name
-      if (!(routeName === 'register') && !(routeName === 'login')) {
-        let AuthService = trans.injector().get('AuthService')
-        AuthService.check().then((response) => {
-          $rootScope.user = response.user[0]
-        })
-      }
+      let AuthService = trans.injector().get('AuthService')
+      AuthService.check()
     })
   }])
