@@ -88,6 +88,8 @@ body {
 
 .button {
   @extend .btn;
+  border-radius: 100px !important;
+  padding: 0.5em 2em !important;
   &.primary {
     @extend .btn-primary;
   }
@@ -114,7 +116,6 @@ body {
     @extend .btn-lg;
   }
 }
-
 .message {
   @extend .alert;
   &.success {
