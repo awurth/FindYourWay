@@ -38,36 +38,15 @@ public class ScoreRepresentation extends Representation {
     private UriInfo uriInfo;
     
     @GET
-    @ApiOperation(value = "Get all the scores", notes = "Access : Everyone")
+    @Context
+    @ApiOperation(value = "Get all the scores (ordered by DESC)", notes = "Access : Everyone")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public Response getAll() {
-       List<Score> scores = scoreResource.findAll();
-       scores.parallelStream().forEach(score -> {
-           Question question = questionResource.findById(score.getQuestion().getId());
-           question.getLinks().clear();
-           question.addLink(this.getUriForSelfQuestion(uriInfo, question),"self");
-
-           List<Point> points = question.getPoints();
-           List<Hint> hints = question.getHints();
-           for (Point point : points) {
-               point.getLinks().clear();
-               point.addLink(getUriForSelfPoint(uriInfo, point), "self");
-           }
-
-           for (Hint hint : hints) {
-               hint.getLinks().clear();
-               hint.addLink(getUriForSelfHint(uriInfo, hint), "self");
-           }
-
-            question.setPoints(points);
-            score.setQuestion(question);
-        });
-
+        List<Score> scores = makeLinks(this.uriInfo, scoreResource.findAll());;
         GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scores){};
-
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
@@ -104,6 +83,26 @@ public class ScoreRepresentation extends Representation {
         score.setQuestion(question);
 
         return Response.ok(score, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Context
+    @Path("/pages")
+    @ApiOperation(value = "Get all the scores (ordered by DESC) with a pagination method. Warning : Offset starts at 1 ! Limit : 0 is unlimited", notes = "Access : Everyone")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Response pagination(@QueryParam("offset") int number, @QueryParam("limit") int limit) {
+        List<Score> scores = scoreResource.offsetLimit(number,limit);
+
+        if (scores == null || scores.isEmpty())
+            flash(404, "Error : there is no results on this page");
+
+        scores = makeLinks(this.uriInfo, scores);
+        GenericEntity<List<Score>> list = new GenericEntity<List<Score>>(scores){};
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
@@ -238,6 +237,36 @@ public class ScoreRepresentation extends Representation {
                 .path('/' + hint.getId())
                 .build()
                 .toString();
+    }
+
+    /**
+     * Method to create URI Links into the JSON result
+     * @param scores
+     * @return List of Score
+     */
+    private List<Score> makeLinks(@Context UriInfo uriInfo, List<Score> scores) {
+        scores.forEach(score -> {
+            Question question = questionResource.findById(score.getQuestion().getId());
+            question.getLinks().clear();
+            question.addLink(this.getUriForSelfQuestion(this.uriInfo, question),"self");
+
+            List<Point> points = question.getPoints();
+            List<Hint> hints = question.getHints();
+            for (Point point : points) {
+                point.getLinks().clear();
+                point.addLink(getUriForSelfPoint(this.uriInfo, point), "self");
+            }
+
+            for (Hint hint : hints) {
+                hint.getLinks().clear();
+                hint.addLink(getUriForSelfHint(this.uriInfo, hint), "self");
+            }
+
+            question.setPoints(points);
+            score.setQuestion(question);
+        });
+
+        return scores;
     }
 
 }

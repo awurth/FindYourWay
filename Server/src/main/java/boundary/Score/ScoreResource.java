@@ -33,6 +33,8 @@ public class ScoreResource {
                 .getResultList();
     }
 
+
+
     /**
      * Method to get all the scores from a Question
      * @param question
@@ -40,8 +42,24 @@ public class ScoreResource {
      */
     public List<Score> findByQuestion(Question question) {
         return entityManager.createQuery("SELECT s FROM Score s WHERE s.question =: question")
-        .setParameter("question", question)
-        .getResultList();
+                            .setParameter("question", question)
+                            .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
+                            .getResultList();
+    }
+
+    /**
+     * Method that returns the scores with pagination and limit method
+     *
+     * @param offset start at the nth position
+     * @param limit number max of result
+     * @return List of Score
+     */
+    public List<Score> offsetLimit(int offset, int limit) {
+        return entityManager.createNamedQuery("Score.findAll", Score.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH)
+                .getResultList();
     }
     
     /**
