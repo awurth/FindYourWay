@@ -21,6 +21,7 @@
 11. Click on "Validate location". Your score will show up on the right of the page. Repeat step 10 five times.
 
 > How to be an admin ?
+
 First of all we thought to add a route in order to create an admin user but it is not secured at all. <br/>
 So we have decided that the only way to add it is in the database. You just have to create a normal user but with ```UserRole.ADMIN``` as Role
 
@@ -61,7 +62,7 @@ $ docker build --build-arg DB_HOST=127.0.0.1 --build-arg DB_NAME=findyourway --b
 ```
 
 ### 4. Run an instance of a Postgres Server
->> For example : 
+> Example given : 
 
 ```bash
 $ docker run  -p 5432:5432 -itd --restart always \
