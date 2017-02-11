@@ -6,8 +6,7 @@
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()  
 </p>  <br>
 
-
-# How to play
+# How to play ?
 1. Go to "Register" page and create an account. You will be redirected to Login page
 2. Log in to your account
 3. Go to "My account" page and click on the "Manage questions" button
@@ -19,11 +18,11 @@
 9. Go to homepage and click on the "Play" button. This will select a random question from the database and create a game.
 10. You will see a google map, the first location's name and hint. Click on the map to place a marker on it.
 11. Click on "Validate location". Your score will show up on the right of the page. Repeat step 10 five times.
-
+<br/>
 > How to be an admin ?
 
 First of all we thought to add a route in order to create an admin user but it is not secured at all. <br/>
-So we have decided that the only way to add it is in the database. You just have to create a normal user but with ```UserRole.ADMIN``` as Role
+So we have decided that the only way to add it is in the database. You just have to create a normal user but with ```ADMIN``` as Role
 
 <br/>
 
@@ -43,8 +42,8 @@ Documentation available at the index page (with docker: http://localhost:8080/fi
 - Role Accounts
 
 ## Docker
-> A Dockerfile is included, it contains Debian, Wildfly and we will add Postgres in the future. <br/>
-The admin login and password for Wildfly is username : ```admin``` , password : ```admin````
+> A Dockerfile is included, it contains Debian, Wildfly and a Postgres JDBC Driver. <br/>
+The admin login and password for Wildfly is username : ```admin``` , password : ```admin```
 
 - API available at :  http://localhost:8080/findyourway/api/
 - Wildfly's dashboard :  http://localhost:9990/
@@ -61,8 +60,8 @@ $ cd FindYourWay/Server/docker
 $ docker build --build-arg DB_HOST=127.0.0.1 --build-arg DB_NAME=findyourway --build-arg DB_USER=root --build-arg DB_PASS=root --tag api-server .
 ```
 
-### 4. Run an instance of a Postgres Server
-> Example given : 
+### 3. Run an instance of a Postgres Server
+> Example given :
 
 ```bash
 $ docker run  -p 5432:5432 -itd --restart always \
@@ -70,7 +69,7 @@ $ docker run  -p 5432:5432 -itd --restart always \
 --env 'DB_NAME=findyourway' \
 sameersbn/postgresql:9.6-2
 ```
-### 3. Run your fresh container
+### 4. Run your fresh container
 ```bash
 $ docker run -p 8080:8080 -p 9990:9990 api-server
 ```
