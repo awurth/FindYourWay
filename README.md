@@ -1,13 +1,18 @@
 # FindYourWay
 > A mini-game made in 5 days using Google Maps images that drops the player in a random location and challenges them to work out where they are.
 
+<p align="center"><img style="margin-bottom:3em;" width="550px"src="http://geoawesomeness.com/wp-content/uploads/2015/08/GeoGuessr-image-Geoawesomeness.jpg">
+<br> <br>
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()  
+   </p>  <br>
+
 
 # How to play
 > Alexis or someone please it's 4 am
 
 
 # Server
-RESTful API written in Java, using Jax-RS and JPA it also follows the Entity-Control-Boundary pattern. 
+RESTful API written in Java, using Jax-RS and JPA it also follows the Entity-Control-Boundary pattern.
 
 Documentation available at the index page (with docker: http://localhost:8080/findyourway)
 
@@ -22,8 +27,9 @@ Documentation available at the index page (with docker: http://localhost:8080/fi
 - Role Accounts
 
 ## Docker
-> A Dockerfile is included, it contains Debian, Wildfly and we will add Postgres in the future.
-The admin login and password for Wildfly is username : ```admin``` , password : ```admin```
+> A Dockerfile is included, it contains Debian, Wildfly and we will add Postgres in the future. <br/>
+The admin login and password for Wildfly is username : ```admin``` , password : ```admin````
+
 - API available at :  http://localhost:8080/findyourway/api/
 - Wildfly's dashboard :  http://localhost:9990/
 
@@ -33,13 +39,13 @@ The admin login and password for Wildfly is username : ```admin``` , password : 
 $ git clone https://github.com/TPCISIIE/FindYourWay.git
 ```
 
-### 2. Build your Dockerfile 
+### 2. Build your Dockerfile
 ```bash
 $ cd FindYourWay/Server/docker
 $ docker build --build-arg DB_HOST=localhost --build-arg DB_NAME=findyourway --build-arg DB_USER=root --build-arg DB_PASS=root --tag api-server .
 ```
 
-### 3. Run your fresh container 
+### 3. Run your fresh container
 ```bash
 $ docker run -p 8080:8080 -p 9990:9990 -p 5432:5432 api-server
 ```
@@ -54,10 +60,10 @@ $ docker run -p 8080:8080 -p 9990:9990 -p 5432:5432 api-server
  - Webpack
  - Bootstrap SASS
 
-### Why Webpack ? 
+### Why Webpack ?
 - It compiles ES6 into ES5 (by using Babel)
 - It isolates the code by using modules
-- It includes a hot reload 
+- It includes a hot reload
 
 ## Installation
 ### 1. Clone repository if it is done yet
@@ -89,7 +95,7 @@ Run the project with Electron (do not forget to build the project before)
 $ npm run electron
 ```
 
-## Authors 
+## Authors
 Xavier CHOPIN, Corentin LABROCHE, David LEBRUN and Alexis WURTH
 
 ## License
